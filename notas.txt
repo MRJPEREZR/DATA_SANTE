@@ -1,0 +1,62 @@
+- Transform the dates in format mm/dd/yyyy to dd/mm/yyyy:
+    Fecha de inicio de síntomas
+    Periodo mínimo de incubación (2 días)
+    Periodo mínimo de incubación (7 días)
+    Fecha estimada de alta sanitaria
+    Fecha de toma de muestra
+    Fecha de resultado de laboratorio
+    Fecha de la defunción
+    
+- See what to do with each column that has missing data:
+
+    No de caso positivo por inicio de síntomas (30%)
+    Periodo mínimo de incubación (2 días) (29.2%)
+    Periodo mínimo de incubación (7 días) (29.2%)
+    Fecha estimada de Alta Sanitaria (29.2%)
+    Estatus día previo (0.8%)
+    Fecha de la defunción (99.4%)
+    Semana epidemiológica de defunciones positivas (99.4%)
+    Semana epidemiológica de resultados positivos (30.1%)
+    Vacuna contra COVID19 (65.2%)
+    Marca (65.2%)
+    Fecha de última aplicación (65.3%)
+    Ocupación (0.4%)
+    REFUERZO (94%)
+    FECHA REFUERZO (94%)
+    VARIANTE (99.8%)
+    INFLUENZA (98%)
+    
+      
+-  Categorical encoding:
+
+    Institución tratante:
+    Unidad notificante:
+    Toma de muestra en el estado: Binary (i think, TO CHECK)
+    Municipio de residencia:
+    Sexo: Binary
+    Procedencia:
+    Estatus día previo:
+    Tipo de manejo:
+    Estatus del paciente:
+    Semana epidemiológica de defunciones positivas:
+    Semana epidemiológica de resultados positivos:
+    Resultado de laboratorio:
+    Pacientes que requirieron intubación: Binary
+    Pacientes que ingresaron a UCI: Binary
+    Diagnóstico clínico de neumonía: Binary
+    Diagnóstico probable: Binary
+    ENFERMEDADES: Binary
+    Vacuna contra COVID19:
+    Marca:
+    Fecha de última aplicación:
+    Ocupación:
+    REFUERZO:
+    FECHA REFUERZO:
+    VARIANTE:
+    INFLUENZA:
+    
+    
+    
+    
+  
+- 
