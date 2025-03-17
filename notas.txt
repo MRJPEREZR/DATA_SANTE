@@ -38,22 +38,22 @@
     
 - See what to do with each column that has missing data:
 
-    No de caso positivo por inicio de síntomas (30%)
-    Periodo mínimo de incubación (2 días) (29.2%)
-    Periodo mínimo de incubación (7 días) (29.2%)
-    Fecha estimada de Alta Sanitaria (29.2%)
+    No de caso positivo por inicio de síntomas (30%) : It's normal because all NA are patients without COVID (It's a way to enumerate patients with COVID)
+    Periodo mínimo de incubación (2 días) (29.2%) : It's for patients with COVID so no missing data
+    Periodo mínimo de incubación (7 días) (29.2%) : It's for patients with COVID so no missing data
+    Fecha estimada de Alta Sanitaria (29.2%) : It's for patients with COVID so no missing data
     Estatus día previo (0.8%)
-    Fecha de la defunción (99.4%)
-    Semana epidemiológica de defunciones positivas (99.4%)
-    Semana epidemiológica de resultados positivos (30.1%)
+    Fecha de la defunción (99.4%) : All NA represents patients that didn't die
+    Semana epidemiológica de defunciones positivas (99.4%) : All NA represents patients that didn't die
+    Semana epidemiológica de resultados positivos (30.1%): It's for patients with COVID so almost no missing data
     Vacuna contra COVID19 (65.2%)
     Marca (65.2%)
-    Fecha de última aplicación (65.3%)
-    Ocupación (0.4%)
-    REFUERZO (94%)
-    FECHA REFUERZO (94%)
-    VARIANTE (99.8%)
-    INFLUENZA (98%)
+    Fecha de última aplicación (65.3%) 
+    Ocupación (0.4%) : There is a variable called "OTROS", we can consider impute data 
+    REFUERZO (94%) : Delete variable (not useful)
+    FECHA REFUERZO (94%) : Delete variable (not useful)
+    VARIANTE (99.8%): Delete variable (not useful)
+    INFLUENZA (98%) : Delete variable (not useful)
     
       
 -  Categorical encoding:
@@ -78,14 +78,17 @@
     Vacuna contra COVID19:
     Marca:
     Fecha de última aplicación:
-    Ocupación:
-    REFUERZO:
-    FECHA REFUERZO:
-    VARIANTE:
-    INFLUENZA:
+    Ocupación: Delete variable (not useful)
+    REFUERZO: Delete variable (not useful)
+    FECHA REFUERZO: Delete variable (not useful)
+    VARIANTE: Delete variable (not useful)
+    INFLUENZA: Delete variable (not useful)
     
 - New variables
-    Fecha estimada de Alta Sanitaria - Fecha de inincio de sintomas
+
+    Fecha estimada de Alta Sanitaria - Fecha de inincio de sintomas -> No se va a poder pq es siempre 16
+    Fecha de toma de muestra - Fecha de inicio de sintomas
+    Fecha de defuncion - Fecha de inicio de sintomas (for those who died)
     
     
   
