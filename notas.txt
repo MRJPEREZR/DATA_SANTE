@@ -1,3 +1,32 @@
+- Variables that are not useful for our objective:
+    Toma de muestra en el estado: 
+    Procedencia:
+    Fecha de llegada al estado:
+    REFUERZO:
+    FECHA REFUERZO:
+    VARIANTE:
+    INFLUENZA:
+    
+-Variables useful but highly imbalanced:
+
+    Mostly all
+
+-Variables that are not imbalanced:
+
+    Municipio de residencia: TO CHECK
+    Edad
+    Sexo
+    Fecha de inicio de síntomas
+    Periodo mínimo de incubación (2 días)
+    Periodo mínimo de incubación (7 días)
+    Fecha estimada de alta sanitaria
+    Fecha de toma de muestra
+    Fecha de la defunción
+    Semana epidemiológica de resultados positivos (Not very useful)
+    Resultado de laboratorio
+    
+  
+
 - Transform the dates in format mm/dd/yyyy to dd/mm/yyyy:
     Fecha de inicio de síntomas
     Periodo mínimo de incubación (2 días)
@@ -55,7 +84,8 @@
     VARIANTE:
     INFLUENZA:
     
-    
+- New variables
+    Fecha estimada de Alta Sanitaria - Fecha de inincio de sintomas
     
     
   
