@@ -6,6 +6,12 @@
     FECHA REFUERZO:
     VARIANTE:
     INFLUENZA:
+    Estatus día previo:
+    Periodo mínimo de incubación (2 días)
+    Periodo mínimo de incubación (7 días)
+    Fecha estimada de alta sanitaria
+    Semana epidemiológica de defunciones positivas
+    Semana epidemiológica de resultados positivos
     
 -Variables useful but highly imbalanced:
 
@@ -42,14 +48,14 @@
     Periodo mínimo de incubación (2 días) (29.2%) : It's for patients with COVID so no missing data
     Periodo mínimo de incubación (7 días) (29.2%) : It's for patients with COVID so no missing data
     Fecha estimada de Alta Sanitaria (29.2%) : It's for patients with COVID so no missing data
-    Estatus día previo (0.8%)
+    Estatus día previo (0.8%) : Delete variable (not useful)
     Fecha de la defunción (99.4%) : All NA represents patients that didn't die
     Semana epidemiológica de defunciones positivas (99.4%) : All NA represents patients that didn't die
     Semana epidemiológica de resultados positivos (30.1%): It's for patients with COVID so almost no missing data
-    Vacuna contra COVID19 (65.2%)
-    Marca (65.2%)
-    Fecha de última aplicación (65.3%) 
-    Ocupación (0.4%) : There is a variable called "OTROS", we can consider impute data 
+    Vacuna contra COVID19 (65.2%) : All NA represents patients who were not vaccinated against COVID
+    Marca (65.2%) : All NA represents patients who were not vaccinated against COVID
+    Fecha de última aplicación (65.3%) : All NA represents patients who were not vaccinated against COVID
+    Ocupación (0.4%) : There is a variable called "OTROS", we can consider impute data, Add a variable that means :"We don't know" 
     REFUERZO (94%) : Delete variable (not useful)
     FECHA REFUERZO (94%) : Delete variable (not useful)
     VARIANTE (99.8%): Delete variable (not useful)
@@ -60,15 +66,10 @@
 
     Institución tratante:
     Unidad notificante:
-    Toma de muestra en el estado: Binary (i think, TO CHECK)
     Municipio de residencia:
     Sexo: Binary
-    Procedencia:
-    Estatus día previo:
     Tipo de manejo:
     Estatus del paciente:
-    Semana epidemiológica de defunciones positivas:
-    Semana epidemiológica de resultados positivos:
     Resultado de laboratorio:
     Pacientes que requirieron intubación: Binary
     Pacientes que ingresaron a UCI: Binary
@@ -77,12 +78,7 @@
     ENFERMEDADES: Binary
     Vacuna contra COVID19:
     Marca:
-    Fecha de última aplicación:
-    Ocupación: Delete variable (not useful)
-    REFUERZO: Delete variable (not useful)
-    FECHA REFUERZO: Delete variable (not useful)
-    VARIANTE: Delete variable (not useful)
-    INFLUENZA: Delete variable (not useful)
+    Ocupación: 
     
 - New variables
 
@@ -92,4 +88,20 @@
     
     
   
-- 
+- Pasos:
+
+  Dimensiones el dataset, descripcion del dataset, objetivos, para que y para quien?
+  Tipo de variables
+  Examinar cada variable en el dataset y comprender su rol
+  Verificar el tipo de cada variable
+  Identificar valores faltantes o anómalos
+  Decidir cómo manejar esos valores (rellenarlos, eliminarlos, etc.)
+  Identificar si hay valores que no tienen sentido o que podrían ser errores de entrada (por ejemplo, edades negativas o días entre síntomas y defunción muy altos).
+  Crear nuevas variables
+  Matriz de correlacion
+  Manejo de datos faltantes
+  Corregir errores
+  Categorical encoding
+  Normalizar y estandarizar variables (es necesario para ciertos modelos)
+  
+  
