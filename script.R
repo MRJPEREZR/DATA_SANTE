@@ -24,9 +24,27 @@ date_columns <- c(
   "Fecha de inicio de síntomas",
   "Fecha de toma de muestra",
   "Fecha de resultado de laboratorio",
-  "Fecha de la defunción",
   "Fecha de última aplicación"
 )
+
+# Convert dates from mm/dd/yyyy to dd/mm/yyyy
+df <- df %>%
+  mutate(across(all_of(date_columns), ~ as.Date(., format = "%m/%d/%Y")))
+
+# Special processing for the column "Fecha de la defunción" due to its format
+df <- df %>%
+  mutate(
+    `Fecha de la defunción` = case_when(
+      # Convert "NA" (text) to NA (missing value)
+      `Fecha de la defunción` == "NA" ~ NA_character_,
+      # Convert numerical values (as "44562") to dates
+      grepl("^[0-9]+$", `Fecha de la defunción`) ~ as.character(as.Date(as.numeric(`Fecha de la defunción`), origin = "1899-12-30")),
+      # Keep other values as they are (in case there are dates in text format)
+      TRUE ~ `Fecha de la defunción`
+    ),
+    # Convert the column to Date type
+    `Fecha de la defunción` = as.Date(`Fecha de la defunción`, format = "%Y-%m-%d")
+  )
 
 df <- df %>%
   mutate(across(where(is.character), as.factor))
