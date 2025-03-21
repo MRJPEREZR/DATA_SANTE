@@ -24,10 +24,13 @@ library(purrr)
 # Convert "NA" (text) to NA (missing value)
 # Apply the transformation to all columns
 df <- df %>%
-  mutate(across(everything(), ~ case_when(
-    . == "NA" ~ NA_character_,
-    TRUE ~ .  # Keep other values as they are
-  )))
+  mutate(across(where(is.character), ~ {
+    ifelse(. == "NA", NA_character_, .)
+  }))
+
+#Convert "No de caso positivo por inicio de síntomas" from char to num
+df <- df %>%
+  mutate('No de caso positivo por inicio de síntomas' = as.numeric('No de caso positivo por inicio de síntomas'))
 
 # Special processing for the column "Fecha de la defunción" due to its format
 df <- df %>%
