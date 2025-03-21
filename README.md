@@ -82,7 +82,7 @@ Describe our whole work cleaning and transforming variables to prepare our datas
 
 ## Categorical values mapping
 
-Each column was transformed as factor. So, [here](Docs/LabelsForCategoricalVariables.txt), you can see the mapping between each label factor and its respective number id.
+Each column was transformed as factor. So, [here](Docs/LabelsForCategoricalVariables.md), you can see the mapping between each label factor and its respective number id.
 
 # Modeling
 
