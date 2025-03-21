@@ -93,7 +93,7 @@
   Dimensiones el dataset, descripcion del dataset, objetivos, para que y para quien?
   Tipo de variables
   Examinar cada variable en el dataset y comprender su rol
-  Verificar el tipo de cada variable
+  Verificar el tipo de cada   variable
   Identificar valores faltantes o anómalos
   Decidir cómo manejar esos valores (rellenarlos, eliminarlos, etc.)
   Identificar si hay valores que no tienen sentido o que podrían ser errores de entrada (por ejemplo, edades negativas o días entre síntomas y defunción muy altos).

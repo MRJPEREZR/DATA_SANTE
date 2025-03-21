@@ -19,17 +19,7 @@ df <- read_excel("./CENSO_DATOS_ABIERTOS_GENERAL_COVID_2020.xlsx", sheet=1) %>%
 # CHANGING COLUMNS DATA TYPES --------------------------------------------------
 library(dplyr)
 library(lubridate)
-
-date_columns <- c(
-  "Fecha de inicio de síntomas",
-  "Fecha de toma de muestra",
-  "Fecha de resultado de laboratorio",
-  "Fecha de última aplicación"
-)
-
-# Convert dates from mm/dd/yyyy to dd/mm/yyyy
-df <- df %>%
-  mutate(across(all_of(date_columns), ~ as.Date(., format = "%m/%d/%Y")))
+library(purrr)
 
 # Special processing for the column "Fecha de la defunción" due to its format
 df <- df %>%
@@ -46,9 +36,22 @@ df <- df %>%
     `Fecha de la defunción` = as.Date(`Fecha de la defunción`, format = "%Y-%m-%d")
   )
 
+date_columns <- c(
+  "Fecha de inicio de síntomas",
+  "Fecha de toma de muestra",
+  "Fecha de resultado de laboratorio",
+  "Fecha de última aplicación"
+)
+
 df <- df %>%
+  # Convert dates from mm/dd/yyyy to dd/mm/yyyy
+  mutate(across(all_of(date_columns), ~ as.Date(., format = "%m/%d/%Y"))) %>%
+  # Categorical encoding
   mutate(across(where(is.character), as.factor))
 
+factor_mapping <- df %>%
+  select(where(is.factor)) %>%
+  map(~ data.frame(Label = levels(.), Numeric = as.numeric(factor(levels(.)))))
 # EXPLORING DATA ---------------------------------------------------------------
 library(ggplot2)
 library(corrplot)
