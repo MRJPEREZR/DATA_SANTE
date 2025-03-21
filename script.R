@@ -1,12 +1,6 @@
-install.packages("DataExplorer")
-
-
-library(shiny)
+# LOAD DATASET------------------------------------------------------------------
 library(readxl)
 library(tidyverse)
-library(tidymodels)
-
-# LOAD DATASET
 df <- read_excel("./CENSO_DATOS_ABIERTOS_GENERAL_COVID_2020.xlsx", sheet=1) %>%
   # Remove variables that are not useful for our objective
   select(-`Toma de muestra en el ESTADO`, 
@@ -22,11 +16,10 @@ df <- read_excel("./CENSO_DATOS_ABIERTOS_GENERAL_COVID_2020.xlsx", sheet=1) %>%
          - `Fecha estimada de Alta Sanitaria`,
          - `Semana epidemiológica de defunciones positivas`,
          - `Semana epidemiológica de resultados positivos`)
-
+# CHANGING COLUMNS DATA TYPES --------------------------------------------------
 library(dplyr)
 library(lubridate)
 
-# List of date columns to transform
 date_columns <- c(
   "Fecha de inicio de síntomas",
   "Fecha de toma de muestra",
@@ -35,28 +28,12 @@ date_columns <- c(
   "Fecha de última aplicación"
 )
 
-# Convert dates from mm/dd/yyyy to dd/mm/yyyy
-df1 <- df %>%
-  mutate(across(all_of(date_columns), ~ format(as.Date(., format = "%m/%d/%Y"), "%d/%m/%Y")))
+df <- df %>%
+  mutate(across(where(is.character), as.factor))
 
-# Verify the transformation
-head(df1 %>% select(all_of(date_columns)))
-
-# Convert character columns to Date type (format dd/mm/yyyy)
-df1 <- df1 %>%
-  mutate(across(all_of(date_columns), ~ as.Date(., format = "%d/%m/%Y")))
-
-# Verify the transformation
-str(df1 %>% select(all_of(date_columns)))
-
-# Load necessary libraries
-library(tidyverse)
-library(DataExplorer)
+# EXPLORING DATA ---------------------------------------------------------------
 library(ggplot2)
 library(corrplot)
-
-# Check data structure
-glimpse(df)
 
 # 1. Identify missing values
 missing_data <- df1 %>%
@@ -102,10 +79,6 @@ corrplot(corr_matrix, method = "color", type = "lower", tl.cex = 0.7)
 duplicate_rows <- df[duplicated(df), ]
 print(paste("Number of duplicate rows:", nrow(duplicate_rows)))
 
-
-
-# Load necessary libraries
-library(dplyr)
 filtered_data <- df1 %>%
   filter(`Estatus del paciente` == "Defunción", !is.na(`Fecha de la defunción`)) %>%
   select(`Fecha de la defunción`)
