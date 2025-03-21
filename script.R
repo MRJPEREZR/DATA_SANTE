@@ -21,12 +21,18 @@ library(dplyr)
 library(lubridate)
 library(purrr)
 
+# Convert "NA" (text) to NA (missing value)
+# Apply the transformation to all columns
+df <- df %>%
+  mutate(across(everything(), ~ case_when(
+    . == "NA" ~ NA_character_,
+    TRUE ~ .  # Keep other values as they are
+  )))
+
 # Special processing for the column "Fecha de la defunción" due to its format
 df <- df %>%
   mutate(
     `Fecha de la defunción` = case_when(
-      # Convert "NA" (text) to NA (missing value)
-      `Fecha de la defunción` == "NA" ~ NA_character_,
       # Convert numerical values (as "44562") to dates
       grepl("^[0-9]+$", `Fecha de la defunción`) ~ as.character(as.Date(as.numeric(`Fecha de la defunción`), origin = "1899-12-30")),
       # Keep other values as they are (in case there are dates in text format)
