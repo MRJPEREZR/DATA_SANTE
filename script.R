@@ -61,6 +61,19 @@ df <- df %>%
 factor_mapping <- df %>%
   select(where(is.factor)) %>%
   map(~ data.frame(Label = levels(.), Numeric = as.numeric(factor(levels(.)))))
+
+#Creation of new variables
+
+df <- df %>%
+  mutate(
+    `Dias entre inicio de síntomas y toma de muestra` = as.numeric(
+      `Fecha de toma de muestra` - `Fecha de inicio de síntomas`
+    ),
+    `Dias entre inicio de síntomas y defunción` = as.numeric(
+      `Fecha de la defunción` - `Fecha de inicio de síntomas`
+    )
+  )
+
 # EXPLORING DATA ---------------------------------------------------------------
 library(ggplot2)
 library(corrplot)
