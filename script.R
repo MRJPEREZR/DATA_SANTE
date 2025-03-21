@@ -30,8 +30,13 @@ df <- df %>%
 
 #Convert "No de caso positivo por inicio de síntomas" from char to num
 df <- df %>%
-  mutate('No de caso positivo por inicio de síntomas' = as.numeric('No de caso positivo por inicio de síntomas'))
-
+  mutate(
+    `No de caso positivo por inicio de síntomas` = case_when(
+      grepl("^[0-9]+$", `No de caso positivo por inicio de síntomas`) ~  # Verify if the value is a valid number
+        as.numeric(`No de caso positivo por inicio de síntomas`),
+      TRUE ~ NA_real_  # If is not assign NA
+    )
+  )
 # Special processing for the column "Fecha de la defunción" due to its format
 df <- df %>%
   mutate(
