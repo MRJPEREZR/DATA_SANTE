@@ -3,21 +3,23 @@ Final Project "Data Santé" Course.
 
 # Table of contents
 - [Introduction](#introduction)
-- [Purpose](#purpose)
-- [Introducing the dataset](#introducing-the-dataset)
+- [Business undestanding](#business-undestanding)
+- [Data understanding](#data-understanding)
+- [Data Preparation](#data-preparation)
+- [Modeling](#modeling)
+- [Evaluation](#evaluation)
+- [Deployment](#deployment)
 
 # Introduction
 
-# Purpose
+Data science project following the CRISP methodology.
 
-# Introducing the dataset
+# Business undestanding
+
+# Data understanding
 
 ## Profiling report
-[Here](profiling_report.html) you can find a profiling report generated with python to take a quick look to the initial dataset state.
-
-## ETL process
-
-Describe our whole work cleaning and transforming variables to prepare our dataset to train models.
+[Here](Docs/profiling_report.html) you can find a profiling report generated with python to take a quick look to the initial dataset state.
 
 ## Description of dataset's categorical columns used. 
 
@@ -70,6 +72,20 @@ Describe our whole work cleaning and transforming variables to prepare our datas
 | Marca | Vaccine Brand | Marque du vaccin | The brand of the administered COVID-19 vaccine. |
 | Ocupación | Occupation | Profession | The patient’s job or profession. |
 
+# Data Preparation
+
+Describe our whole work cleaning and transforming variables to prepare our dataset to train models.
+
+## Transforming NA char values to real NA missing values
+
+## Fixing date values to variables of interesting.
+
 ## Categorical values mapping
 
-Each column was transformed as factor. So, [here](LabelsForCategoricalVariables.txt), you can see the mapping between each label factor and its respective number id.
+Each column was transformed as factor. So, [here](Docs/LabelsForCategoricalVariables.txt), you can see the mapping between each label factor and its respective number id.
+
+# Modeling
+
+# Evaluation
+
+# Deployment

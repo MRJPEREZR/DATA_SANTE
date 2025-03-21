@@ -1,7 +1,8 @@
 # LOAD DATASET------------------------------------------------------------------
 library(readxl)
 library(tidyverse)
-df <- read_excel("./CENSO_DATOS_ABIERTOS_GENERAL_COVID_2020.xlsx", sheet=1) %>%
+
+df <- read_excel("./Data/CENSO_DATOS_ABIERTOS_GENERAL_COVID_2020.xlsx", sheet=1) %>%
   # Remove variables that are not useful for our objective
   select(-`Toma de muestra en el ESTADO`, 
          -`Procedencia`, 
