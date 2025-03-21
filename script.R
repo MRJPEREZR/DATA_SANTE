@@ -7,7 +7,47 @@ library(tidyverse)
 library(tidymodels)
 
 # LOAD DATASET
-df <- read_excel("./CENSO_DATOS_ABIERTOS_GENERAL_COVID_2020.xlsx", sheet=1)
+df <- read_excel("./CENSO_DATOS_ABIERTOS_GENERAL_COVID_2020.xlsx", sheet=1) %>%
+  # Remove variables that are not useful for our objective
+  select(-`Toma de muestra en el ESTADO`, 
+         -`Procedencia`, 
+         -`Fecha de llegada al Estado`, 
+         -`REFUERZO`, 
+         -`FECHA REFUERZO`, 
+         -`VARIANTE`, 
+         -`INFLUENZA`,
+         - `Estatus día previo`,
+         - `Periodo mínimo de incubación (2 días)`,
+         - `Periodo máximo de incubación (7 días)`,
+         - `Fecha estimada de Alta Sanitaria`,
+         - `Semana epidemiológica de defunciones positivas`,
+         - `Semana epidemiológica de resultados positivos`)
+
+library(dplyr)
+library(lubridate)
+
+# List of date columns to transform
+date_columns <- c(
+  "Fecha de inicio de síntomas",
+  "Fecha de toma de muestra",
+  "Fecha de resultado de laboratorio",
+  "Fecha de la defunción",
+  "Fecha de última aplicación"
+)
+
+# Convert dates from mm/dd/yyyy to dd/mm/yyyy
+df1 <- df %>%
+  mutate(across(all_of(date_columns), ~ format(as.Date(., format = "%m/%d/%Y"), "%d/%m/%Y")))
+
+# Verify the transformation
+head(df1 %>% select(all_of(date_columns)))
+
+# Convert character columns to Date type (format dd/mm/yyyy)
+df1 <- df1 %>%
+  mutate(across(all_of(date_columns), ~ as.Date(., format = "%d/%m/%Y")))
+
+# Verify the transformation
+str(df1 %>% select(all_of(date_columns)))
 
 # Load necessary libraries
 library(tidyverse)
@@ -19,7 +59,7 @@ library(corrplot)
 glimpse(df)
 
 # 1. Identify missing values
-missing_data <- df %>%
+missing_data <- df1 %>%
   summarise(across(everything(), ~ mean(is.na(.)) * 100)) %>%
   pivot_longer(everything(), names_to = "Variable", values_to = "Missing_Percentage") %>%
   arrange(desc(Missing_Percentage))
@@ -66,49 +106,10 @@ print(paste("Number of duplicate rows:", nrow(duplicate_rows)))
 
 # Load necessary libraries
 library(dplyr)
+filtered_data <- df1 %>%
+  filter(`Estatus del paciente` == "Defunción", !is.na(`Fecha de la defunción`)) %>%
+  select(`Fecha de la defunción`)
 
-# Remove variables that are not useful for our objective
-df_removed <- df %>%
-  select(-`Toma de muestra en el ESTADO`, 
-         -`Procedencia`, 
-         -`Fecha de llegada al Estado`, 
-         -`REFUERZO`, 
-         -`FECHA REFUERZO`, 
-         -`VARIANTE`, 
-         -`INFLUENZA`)
-
-# Verify that the variables have been removed
-names(df_removed)
-
-# Load necessary libraries
-library(dplyr)
-library(lubridate)  # For date manipulation
-
-# List of date columns to transform
-date_columns <- c(
-  "Fecha de inicio de síntomas",
-  "Periodo mínimo de incubación (2 días)",
-  "Periodo máximo de incubación (7 días)",
-  "Fecha estimada de Alta Sanitaria",
-  "Fecha de toma de muestra",
-  "Fecha de resultado de laboratorio",
-  "Fecha de la defunción",
-  "Fecha de última aplicación"
-)
-
-# Convert dates from mm/dd/yyyy to dd/mm/yyyy
-df1 <- df_removed %>%
-  mutate(across(all_of(date_columns), ~ format(as.Date(., format = "%m/%d/%Y"), "%d/%m/%Y")))
-
-# Verify the transformation
-head(df1 %>% select(all_of(date_columns)))
-
-# Convert character columns to Date type (format dd/mm/yyyy)
-df1 <- df1 %>%
-  mutate(across(all_of(date_columns), ~ as.Date(., format = "%d/%m/%Y")))
-
-# Verify the transformation
-str(df1 %>% select(all_of(date_columns)))
 
 
 
