@@ -19,7 +19,7 @@ Data science project following the CRISP methodology.
 # Data understanding
 
 ## Profiling report
-[Here](Docs/profiling_report.html) you can find a profiling report generated with python to take a quick look to the initial dataset state.
+[Here](https://mrjperezr.github.io/DATA_SANTE/Docs/profiling_report.html) you can find a profiling report generated with python to take a quick look to the initial dataset state.
 
 ## Description of dataset's categorical columns used. 
 
