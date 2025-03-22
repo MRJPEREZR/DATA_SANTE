@@ -39,7 +39,7 @@ df <- df %>%
     )
   )
 
-# Special processing for the column "Fecha de la defunción" and "Fecha de última plicación" due to its format
+# Special processing for the column "Fecha de la defunción" and "Fecha de última aplicación" due to its format
 df <- df %>%
   mutate(
     `Fecha de la defunción` = case_when(
@@ -92,7 +92,7 @@ library(ggplot2)
 library(corrplot)
 
 # 1. Identify missing values
-missing_data <- df1 %>%
+missing_data <- df %>%
   summarise(across(everything(), ~ mean(is.na(.)) * 100)) %>%
   pivot_longer(everything(), names_to = "Variable", values_to = "Missing_Percentage") %>%
   arrange(desc(Missing_Percentage))
@@ -135,10 +135,7 @@ corrplot(corr_matrix, method = "color", type = "lower", tl.cex = 0.7)
 duplicate_rows <- df[duplicated(df), ]
 print(paste("Number of duplicate rows:", nrow(duplicate_rows)))
 
-filtered_data <- df1 %>%
-  filter(`Estatus del paciente` == "Defunción", !is.na(`Fecha de la defunción`)) %>%
-  select(`Fecha de la defunción`)
-
-
+# EXPORTING THE FINAL DATAFRAME TO .CSV ----------------------------------------
+write.csv(df, "./Data/data.csv", row.names = FALSE)
 
 
