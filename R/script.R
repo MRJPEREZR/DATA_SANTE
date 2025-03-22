@@ -55,8 +55,7 @@ df <- df %>%
 
 date_columns <- c(
   "Fecha de inicio de síntomas",
-  "Fecha de toma de muestra",
-  # "Fecha de resultado de laboratorio"
+  "Fecha de toma de muestra"
 )
 
 df <- df %>%
@@ -80,8 +79,6 @@ df <- df %>%
       `Fecha de la defunción` - `Fecha de inicio de síntomas`
     )
   )
-
-# EXPLORING DATA ---------------------------------------------------------------
 
 # EXPLORING DATA ---------------------------------------------------------------
 library(ggplot2)
