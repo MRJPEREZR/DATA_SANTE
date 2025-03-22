@@ -56,7 +56,7 @@ df <- df %>%
 date_columns <- c(
   "Fecha de inicio de síntomas",
   "Fecha de toma de muestra",
-  "Fecha de resultado de laboratorio"
+  # "Fecha de resultado de laboratorio"
 )
 
 df <- df %>%
@@ -130,6 +130,6 @@ duplicate_rows <- df[duplicated(df), ]
 print(paste("Number of duplicate rows:", nrow(duplicate_rows)))
 
 # EXPORTING THE FINAL DATAFRAME TO .CSV ----------------------------------------
-write.csv(df, "./Data/data.csv", row.names = FALSE)
+write.csv(df, "./R/shiny/data.csv", row.names = FALSE)
 
 
