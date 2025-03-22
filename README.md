@@ -44,7 +44,7 @@ Data science project following the CRISP methodology.
 | Diagnóstico clínico de Neumonía                 | chr -> Factor 2 levels      |
 | Diagnóstico probable                            | chr -> Factor 2 levels      |
 | Fiebre                                          | chr -> Factor 3 levels      |
-| Tos                                             | chr -> Factor 3 levels      |
+| Tos                                             | chr -> Factor 2 levels      |
 | Odinofagia                                      | chr -> Factor 3 levels      |
 | Disnea                                          | chr -> Factor 3 levels      |
 | Irritabilidad                                   | chr -> Factor 3 levels      |

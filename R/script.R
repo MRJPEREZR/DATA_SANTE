@@ -65,7 +65,7 @@ df <- df %>%
   # Categorical encoding
   mutate(across(where(is.character), as.factor))
 
-factor_mapping <- df %>%
+# factor_mapping <- df %>%
   select(where(is.factor)) %>%
   map(~ data.frame(Label = levels(.), Numeric = as.numeric(factor(levels(.)))))
 

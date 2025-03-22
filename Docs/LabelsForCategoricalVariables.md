@@ -286,4 +286,99 @@
 |-----------|---------|
 | Negativo  | 1       |
 | Pendiente | 2       |
-| SARS-COV-2 | 3
+| SARS-COV-2 | 3      |
+
+### Resultado de laboratorio
+| Label       | Numeric |
+|------------|---------|
+| Negativo   | 1       |
+| Pendiente  | 2       |
+| SARS-COV-2 | 3       |
+
+### Pacientes que requirieron intubación
+| Label | Numeric |
+|------|---------|
+| NO   | 1       |
+| SI   | 2       |
+
+### Pacientes que ingresaron a UCI
+| Label | Numeric |
+|------|---------|
+| NO   | 1       |
+| SI   | 2       |
+
+### Diagnóstico clínico de Neumonía
+| Label | Numeric |
+|------|---------|
+| NO   | 1       |
+| SI   | 2       |
+
+### Diagnóstico probable
+| Label                                        | Numeric |
+|---------------------------------------------|---------|
+| ENFERMEDAD TIPO INFLUENZA (ETI)            | 1       |
+| INFECCIÓN RESPIRATORIA AGUDA GRAVE (IRAG)  | 2       |
+
+### Fiebre
+| Label      | Numeric |
+|-----------|---------|
+| NO        | 1       |
+| SE IGNORA | 2       |
+| SI        | 3       |
+
+### Tos
+| Label | Numeric |
+|------|---------|
+| NO   | 1       |
+| SI   | 2       |
+
+### Odinofagia, Disnea, Irritabilidad, Diarrea, Dolor torácico, Escalofríos, Cefalea, Mialgias, Artralgias, Ataque al estado general, Rinorrea, Polipnea, Vómito, Dolor abdominal, Conjuntivitis, Cianosis, Inicio súbito, Anosmia, Disgeusia, Diabetes, EPOC, Asma, Inmunosupresión, Hipertensión, VIH/SIDA, Otra condición, Enfermedad cardiaca, Obesidad, Insuficiencia renal crónica, Tabaquismo
+| Label      | Numeric |
+|-----------|---------|
+| NO        | 1       |
+| SE IGNORA | 2       |
+| SI        | 3       |
+
+### Vacuna contra COVID19
+| Label       | Numeric |
+|------------|---------|
+| COMPLETA   | 1       |
+| INCOMPLETA | 2       |
+| SE IGNORA  | 3       |
+
+### Marca de vacuna
+| Label                        | Numeric |
+|-----------------------------|---------|
+| AstraZeneca                 | 1       |
+| CanSino                     | 2       |
+| Gamaleya                    | 3       |
+| Janssen (Johnson & Johnson) | 4       |
+| Moderna                     | 5       |
+| Novavax                     | 6       |
+| pfizer BioNTech             | 7       |
+| Pfizer BioNTech             | 8       |
+| Se desconoce                | 9       |
+| Sinopharma                  | 10      |
+| Sinovac                     | 11      |
+
+### Ocupación
+| Label                                         | Numeric |
+|----------------------------------------------|---------|
+| CAMPESINOS                                   | 1       |
+| CHOFERES                                     | 2       |
+| COMERCIANTES DE MERCADOS FIJOS O AMBULANTES  | 3       |
+| DENTISTAS                                    | 4       |
+| DESEMPLEADOS                                 | 5       |
+| EMPLEADOS                                    | 6       |
+| ENFERMERAS                                   | 7       |
+| ESTUDIANTES                                  | 8       |
+| GERENTES O PROPIETARIOS DE EMPRESAS O NEGOCIOS | 9      |
+| HOGAR                                        | 10      |
+| JUBILADO / PENSIONADO                        | 11      |
+| LABORATORISTAS                               | 12      |
+| MAESTROS                                     | 13      |
+| MEDICOS                                      | 14      |
+| OBREROS                                      | 15      |
+| OTROS                                        | 16      |
+| OTROS PROFESIONISTAS                         | 17      |
+| OTROS TRABAJADORES DE LA SALUD               | 18      |
