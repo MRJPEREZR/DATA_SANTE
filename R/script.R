@@ -38,7 +38,8 @@ df <- df %>%
       TRUE ~ NA_real_  # If is not assign NA
     )
   )
-# Special processing for the column "Fecha de la defunción" due to its format
+
+# Special processing for the column "Fecha de la defunción" and "Fecha de última plicación" due to its format
 df <- df %>%
   mutate(
     `Fecha de la defunción` = case_when(
@@ -48,7 +49,13 @@ df <- df %>%
       TRUE ~ `Fecha de la defunción`
     ),
     # Convert the column to Date type
-    `Fecha de la defunción` = as.Date(`Fecha de la defunción`, format = "%Y-%m-%d")
+    `Fecha de la defunción` = as.Date(`Fecha de la defunción`, format = "%Y-%m-%d"),
+    #Same for "Fecha de última aplicación"
+    `Fecha de última aplicación` = case_when(
+      grepl("^[0-9]+$", `Fecha de última aplicación`) ~ as.character(as.Date(as.numeric(`Fecha de última aplicación`), origin = "1899-12-30")),
+      TRUE ~ `Fecha de última aplicación`
+    ),
+    `Fecha de última aplicación` = as.Date(`Fecha de última aplicación`, format = "%Y-%m-%d")
   )
 
 date_columns <- c(
