@@ -55,7 +55,8 @@ df <- df %>%
 
 date_columns <- c(
   "Fecha de inicio de síntomas",
-  "Fecha de toma de muestra"
+  "Fecha de toma de muestra",
+  "Fecha de resultado de laboratorio"
 )
 
 df <- df %>%
@@ -202,5 +203,7 @@ ggplot(df, aes(x = `Institución tratante`, y = `Dias entre inicio de síntomas 
 
 # EXPORTING THE FINAL DATAFRAME TO .CSV ----------------------------------------
 write.csv(df, "./R/shiny/data.csv", row.names = FALSE)
+saveRDS(df, file = "./R/shiny/dataframe.rds")
+
 
 
