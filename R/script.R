@@ -82,11 +82,13 @@ df <- df %>%
   )
 
 # EXPLORING DATA ---------------------------------------------------------------
+
+# EXPLORING DATA ---------------------------------------------------------------
 library(ggplot2)
 library(corrplot)
 
-# 1. Identify missing values
-missing_data <- df %>%
+# Identify missing values
+missing_data <- df1 %>%
   summarise(across(everything(), ~ mean(is.na(.)) * 100)) %>%
   pivot_longer(everything(), names_to = "Variable", values_to = "Missing_Percentage") %>%
   arrange(desc(Missing_Percentage))
@@ -94,7 +96,7 @@ missing_data <- df %>%
 print("Columns with missing values:")
 print(missing_data)
 
-# 2. Identify constant columns (only one unique value)
+# Identify constant columns (only one unique value)
 constant_columns <- df %>%
   summarise(across(everything(), ~ n_distinct(.))) %>%
   pivot_longer(everything(), names_to = "Variable", values_to = "Unique_Values") %>%
@@ -103,31 +105,103 @@ constant_columns <- df %>%
 print("Columns with a single unique value (potentially useless):")
 print(constant_columns)
 
-# 3. Data type verification
+# Check for duplicate rows
+duplicate_rows <- df[duplicated(df), ]
+print(paste("Number of duplicate rows:", nrow(duplicate_rows)))
+
+# Data type verification
 print("Data Types:")
 print(str(df))
 
-# 4. Identify numeric columns and check distribution
+# Identify numeric columns and check distribution
 numeric_cols <- df %>% select(where(is.numeric))
 summary(numeric_cols)
 
-# 5. Detect outliers using boxplots
-df %>%
-  select(where(is.numeric)) %>%
-  pivot_longer(everything(), names_to = "Variable", values_to = "Value") %>%
-  ggplot(aes(x = Variable, y = Value)) +
-  geom_boxplot() +
-  coord_flip() +
+#Checking if they are dates out of range
+# Define the date range
+start_date <- as.Date("2021-12-01")
+end_date <- as.Date("2022-06-30")
+
+# Function to check if all dates in a column are within the range
+check_date_range <- function(column) {
+  all(column >= start_date & column <= end_date, na.rm = TRUE)
+}
+
+# Apply the function to all Date columns
+date_columns <- df %>% select(where(is.Date))
+
+results <- sapply(date_columns, check_date_range)
+
+# Show results only if any column is FALSE
+if (any(results == FALSE)) {
+  print(results)
+} else {
+  print("All Date columns are within the specified range.")
+}
+
+
+#Histogram for numerical columns
+
+#Edad
+
+ggplot(df, aes(x = `Edad`)) +
+  geom_histogram(binwidth = 5, fill = "steelblue", color = "black") +
+  labs(
+    title = "",
+    x = "Age",
+    y = "Frequence"
+  ) +
+  theme_minimal()
+
+
+# Filter and remove rows where age is greater than or equal to 100
+df <- df %>% filter(Edad < 100)
+
+#We visualize again the histogram
+
+ggplot(df, aes(x = `Edad`)) +
+  geom_histogram(binwidth = 5, fill = "steelblue", color = "black") +
+  labs(
+    title = "",
+    x = "Age",
+    y = "Frequence"
+  ) +
+  theme_minimal()
+
+#Days between symptom onset and death
+
+ggplot(df, aes(x = `Dias entre inicio de síntomas y defunción`)) +
+  geom_histogram(binwidth = 5, fill = "steelblue", color = "black") +
+  labs(
+    title = "",
+    x = "Days between symptom onset and death",
+    y = "Frequence"
+  ) +
+  theme_minimal()
+
+#Days between symptom onset and laboratory sample collection
+
+ggplot(df, aes(x = `Dias entre inicio de síntomas y toma de muestra`)) +
+  geom_histogram(binwidth = 5, fill = "steelblue", color = "black") +
+  labs(
+    title = "",
+    x = "Days between symptom onset and lab sample collection",
+    y = "Frequence"
+  ) +
+  theme_minimal()
+
+#Violin visualization
+#scale = "count" makes the area of each violin proportional to the number of patients treated by the institution.
+ggplot(df, aes(x = `Institución tratante`, y = `Dias entre inicio de síntomas y toma de muestra`)) +
+  geom_violin(aes(fill = `Institución tratante`), scale = "count", alpha = 0.5) +
+  geom_boxplot(width = 0.1, fill = "orange", color = "black") +
+  labs(
+    title = "Violin plots normalized",
+    x = "Institution",
+    y = "Days between symptom onset and lab sample collection"
+  ) +
   theme_minimal() +
-  labs(title = "Outlier Detection via Boxplots")
-
-# 6. Correlation Analysis (for numeric variables)
-corr_matrix <- cor(numeric_cols, use = "complete.obs")
-corrplot(corr_matrix, method = "color", type = "lower", tl.cex = 0.7)
-
-# 7. Check for duplicate rows
-duplicate_rows <- df[duplicated(df), ]
-print(paste("Number of duplicate rows:", nrow(duplicate_rows)))
+  theme(legend.position = "none")
 
 # EXPORTING THE FINAL DATAFRAME TO .CSV ----------------------------------------
 write.csv(df, "./R/shiny/data.csv", row.names = FALSE)
