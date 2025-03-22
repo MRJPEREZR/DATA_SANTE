@@ -64,7 +64,7 @@ df <- df %>%
   # Categorical encoding
   mutate(across(where(is.character), as.factor))
 
-# factor_mapping <- df %>%
+factor_mapping <- df %>%
   select(where(is.factor)) %>%
   map(~ data.frame(Label = levels(.), Numeric = as.numeric(factor(levels(.)))))
 
@@ -85,7 +85,7 @@ library(ggplot2)
 library(corrplot)
 
 # Identify missing values
-missing_data <- df1 %>%
+missing_data <- df %>%
   summarise(across(everything(), ~ mean(is.na(.)) * 100)) %>%
   pivot_longer(everything(), names_to = "Variable", values_to = "Missing_Percentage") %>%
   arrange(desc(Missing_Percentage))
