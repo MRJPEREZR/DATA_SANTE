@@ -319,20 +319,13 @@
 | ENFERMEDAD TIPO INFLUENZA (ETI)            | 1       |
 | INFECCIÓN RESPIRATORIA AGUDA GRAVE (IRAG)  | 2       |
 
-### Fiebre
-| Label      | Numeric |
-|-----------|---------|
-| NO        | 1       |
-| SE IGNORA | 2       |
-| SI        | 3       |
-
 ### Tos
 | Label | Numeric |
 |------|---------|
 | NO   | 1       |
 | SI   | 2       |
 
-### Odinofagia, Disnea, Irritabilidad, Diarrea, Dolor torácico, Escalofríos, Cefalea, Mialgias, Artralgias, Ataque al estado general, Rinorrea, Polipnea, Vómito, Dolor abdominal, Conjuntivitis, Cianosis, Inicio súbito, Anosmia, Disgeusia, Diabetes, EPOC, Asma, Inmunosupresión, Hipertensión, VIH/SIDA, Otra condición, Enfermedad cardiaca, Obesidad, Insuficiencia renal crónica, Tabaquismo
+### Fiebre, Odinofagia, Disnea, Irritabilidad, Diarrea, Dolor torácico, Escalofríos, Cefalea, Mialgias, Artralgias, Ataque al estado general, Rinorrea, Polipnea, Vómito, Dolor abdominal, Conjuntivitis, Cianosis, Inicio súbito, Anosmia, Disgeusia, Diabetes, EPOC, Asma, Inmunosupresión, Hipertensión, VIH/SIDA, Otra condición, Enfermedad cardiaca, Obesidad, Insuficiencia renal crónica, Tabaquismo
 | Label      | Numeric |
 |-----------|---------|
 | NO        | 1       |
