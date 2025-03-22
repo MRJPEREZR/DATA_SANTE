@@ -56,8 +56,7 @@ df <- df %>%
 date_columns <- c(
   "Fecha de inicio de síntomas",
   "Fecha de toma de muestra",
-  "Fecha de resultado de laboratorio",
-  "Fecha de última aplicación"
+  "Fecha de resultado de laboratorio"
 )
 
 df <- df %>%
