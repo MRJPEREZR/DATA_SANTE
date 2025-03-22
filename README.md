@@ -142,6 +142,7 @@ Describe our whole work cleaning and transforming variables to prepare our datas
 ## Creating new varibles of interesting
 
 | Column                                          | Data type original -> transformed   |
+|-------------------------------------------------|-------------------------------------|
 | Días entre inicio de síntomas y toma de muestra | num                                 |
 | Días entre inicio de síntomas y defunción       | num                                 |
 
