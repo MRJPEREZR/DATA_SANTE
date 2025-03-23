@@ -11,6 +11,9 @@ ui <- fluidPage(
         radioButtons("symptomSelection", "Select Symptoms:",
                      choices = c("All Symptoms" = "all", "Custom Selection" = "custom"),
                      selected = "all"),
+        radioButtons("attributeSelection", "Select other attributes:",
+                     choices = c("All Attributes" = "all", "Custom Selection" = "custom", "None" = "none"),
+                     selected = "none"),
         
         conditionalPanel(
           condition = "input.symptomSelection == 'custom'",
@@ -22,6 +25,12 @@ ui <- fluidPage(
                                          "Inicio súbito", "Anosmia", "Disgeusia"),
                              selected = c("Fiebre", "Tos", "Odinofagia", "Disnea", "Irritabilidad", 
                                           "Diarrea", "Dolor torácico", "Escalofríos", "Cefalea", "Mialgias"))
+        ),
+        conditionalPanel(
+          condition = "input.attributeSelection == 'custom'",
+          checkboxGroupInput("selectedAttributes", "Select attributes for Clustering:",
+                             choices = c("Sexo", "Tipo de manejo", "Pacientes que requirieron intubación", "Pacientes que ingresaron a UCI"),
+                             selected = c("Sexo"))
         ),
         actionButton("analyze", "Run Analysis")
       ),

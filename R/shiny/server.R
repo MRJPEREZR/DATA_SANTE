@@ -23,8 +23,20 @@ server <- function(input, output) {
       input$selectedSymptoms  # User-selected symptoms
     }
     
+    # Get other attributes based on user selection
+    attribute_vars <- if (input$attributeSelection == "all") {
+      c("Sexo", "Tipo de manejo", "Pacientes que requirieron intubación", "Pacientes que ingresaron a UCI")
+    } else if (input$attributeSelection == "custom") {
+      input$selectedAttributes  # User-selected attributes
+    } else if (input$attributeSelection == "none") {
+      NULL  # No additional attributes
+    }
+    
+    # Combine symptom and attribute selections
+    selected_vars <- c(symptom_vars, attribute_vars)
+    
     df2_filtred <- df1 %>%
-      dplyr::select(all_of(symptom_vars)) %>%
+      dplyr::select(all_of(selected_vars)) %>%
       head(1000) %>%  # Taking a subset for clustering
       as.data.frame()
     
