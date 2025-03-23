@@ -10,7 +10,7 @@ missing_data <- df1 %>%
   pivot_longer(everything(), names_to = "Variable", values_to = "Missing_Percentage") %>%
   arrange(desc(Missing_Percentage))
 
-df2 <- df1 %>% select(-"Vacuna contra COVID19", -"Marca", -"Ocupación", -"Estatus del paciente", -"Diagnóstico probable")
+df2 <- df1 %>% dplyr::select(-c("Vacuna contra COVID19", -"Marca", -"Ocupación", -"Estatus del paciente", -"Diagnóstico probable"))
 mean(is.na(df2))
 
 # Subset
@@ -96,7 +96,7 @@ ggplot(cluster_summary_long, aes(x = as.factor(kmodes_cluster), fill = Most_Comm
        y = "Count",
        fill = "Most Common Category")
 
-# Step 1: Join df2_filtred with cluster_summary to compare rows
+# Step 1: Join df2_filtered with cluster_summary to compare rows
 df2_filtred_with_modes <- df2_filtred %>%
   left_join(cluster_summary, by = "kmodes_cluster")
 

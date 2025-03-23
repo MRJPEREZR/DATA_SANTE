@@ -45,11 +45,36 @@ server <- function(input, output) {
   
   output$tsnePlot <- renderPlot({
     res <- analysis()
-    tsne_obj <- Rtsne(res$gower_dist_kmodes, perplexity = 30)
-    tsne_data <- data.frame(tsne_obj$Y, cluster = as.factor(res$df2_filtred$kmodes_cluster))
+    
+    # Compute t-SNE for k-modes
+    tsne_kmodes <- Rtsne(res$gower_dist_kmodes, perplexity = 30)
+    tsne_data_kmodes <- data.frame(
+      X1 = tsne_kmodes$Y[,1], 
+      X2 = tsne_kmodes$Y[,2], 
+      cluster = as.factor(res$df2_filtred$kmodes_cluster),
+      method = "k-modes"
+    )
+    
+    # Compute t-SNE for PAM
+    tsne_pam <- Rtsne(res$gower_dist_pam, perplexity = 30)
+    tsne_data_pam <- data.frame(
+      X1 = tsne_pam$Y[,1], 
+      X2 = tsne_pam$Y[,2], 
+      cluster = as.factor(res$df2_filtred_age$pam_cluster),
+      method = "PAM"
+    )
+    
+    # Combine both datasets
+    tsne_data <- bind_rows(tsne_data_kmodes, tsne_data_pam)
+    
+    # Plot using facet_wrap to compare both methods
     ggplot(tsne_data, aes(x = X1, y = X2, color = cluster)) +
-      geom_point(size = 2) + theme_minimal() + ggtitle("Clusters Visualization (t-SNE)")
+      geom_point(size = 2) +
+      facet_wrap(~ method) +  # This separates plots by clustering method
+      theme_minimal() +
+      ggtitle("t-SNE Clustering Visualization: k-modes vs. PAM")
   })
+  
   
   cluster_summary_reactive <- reactive({
     res <- analysis()
@@ -76,19 +101,13 @@ server <- function(input, output) {
       left_join(cluster_summary, by = "kmodes_cluster")
     
     matches <- df2_filtred_with_modes %>%
-      rowwise() %>%
-      mutate(Matches_Mode = identical(
-        c_across(-kmodes_cluster),
-        cluster_summary[cluster_summary$kmodes_cluster == kmodes_cluster, -1]
-      )) %>%
+      rowwise() %>% 
+      mutate(Matches_Mode = all(c_across(-kmodes_cluster) == 
+                                  cluster_summary[cluster_summary$kmodes_cluster == kmodes_cluster, -1])) %>%
       ungroup() %>%
       group_by(kmodes_cluster) %>%
-      summarise(
-        Count_Mode_Vector = sum(Matches_Mode, na.rm = TRUE),
-        Total = n(),
-        Percentage = (Count_Mode_Vector / Total) * 100,
-        .groups = "drop"
-      )
+      summarise(Count_Mode_Vector = sum(Matches_Mode), Total = n(), .groups = "drop") %>%
+      mutate(Percentage = (Count_Mode_Vector / Total) * 100)
     
     return(matches)  # Ensure output is returned
   })
