@@ -1,50 +1,60 @@
-# SERVER -----------------------------------------------------------------------
+library(shiny)
 server <- function(input, output) {
-  
-  # Reactive expression to perform clustering
-  clusters <- eventReactive(input$run, {
-    df <- data
-    df <- na.omit(df)  # Remove missing values
-    
-    # Select numeric columns for clustering
-    numeric_cols <- df %>% select_if(is.numeric)
-    
-    if (input$method == "K-Means") {
-      kmeans(numeric_cols, centers = input$clusters)
-    } else {
-      hclust(dist(numeric_cols), method = "ward.D2")
-    }
+  filtered_data <- reactive({
+    df1
   })
   
-  # Output clustering plot
-  output$clusterPlot <- renderPlot({
-    if (input$method == "K-Means") {
-      # Get cluster assignments
-      cluster_results <- clusters()
-      df <- data %>% select_if(is.numeric) %>% na.omit()
-      df$cluster <- as.factor(cluster_results$cluster)
-      
-      # Plot using ggplot2
-      ggplot(df, aes(x = df[, 1], y = df[, 2], color = cluster)) +
-        geom_point(size = 3) +
-        labs(title = "K-Means Clustering",
-             x = colnames(df)[1],
-             y = colnames(df)[2],
-             color = "Cluster") +
-        theme_minimal()
-    } else {
-      # Plot dendrogram for hierarchical clustering
-      plot(clusters())
-      rect.hclust(clusters(), k = input$clusters, border = "red")
-    }
+  output$missingTable <- renderTable({
+    df1 %>% summarise(across(everything(), ~ mean(is.na(.)) * 100)) %>%
+      pivot_longer(everything(), names_to = "Variable", values_to = "Missing_Percentage") %>%
+      arrange(desc(Missing_Percentage))
   })
   
-  # Output cluster summary
-  output$clusterSummary <- renderPrint({
-    if (input$method == "K-Means") {
-      clusters()$centers
-    } else {
-      cutree(clusters(), k = input$clusters)
-    }
+  analysis <- eventReactive(input$analyze, {
+    df2 <- df1 %>% select(-"Vacuna contra COVID19", -"Marca", -"Ocupación", -"Estatus del paciente", -"Diagnóstico probable")
+    df2_filtred <- as.data.frame(df2[0:1000,6:38])
+    df2_filtred_age <- df2_filtred %>% mutate(Edad = df$`Edad`[0:1000])
+    
+    gower_dist_kmodes <- daisy(df2_filtred, metric = "gower")
+    gower_dist_pam <- daisy(df2_filtred_age, metric = "gower")
+    
+    kmodes_model <- kmodes(df2_filtred, modes = input$clusters, iter.max = 200)
+    df2_filtred$kmodes_cluster <- kmodes_model$cluster
+    
+    pam_model <- pam(gower_dist_pam, k = input$clusters)
+    df2_filtred_age$pam_cluster <- pam_model$clustering
+    
+    kmodes_sil <- silhouette(df2_filtred$kmodes_cluster, gower_dist_kmodes)
+    pam_sil <- silhouette(df2_filtred_age$pam_cluster, gower_dist_pam)
+    
+    list(
+      kmodes_score = mean(kmodes_sil[, 3]),
+      pam_score = mean(pam_sil[, 3]),
+      df2_filtred = df2_filtred,
+      df2_filtred_age = df2_filtred_age,
+      gower_dist_kmodes = gower_dist_kmodes,
+      gower_dist_pam = gower_dist_pam
+    )
+  })
+  
+  output$silScores <- renderPrint({
+    res <- analysis()
+    cat("k-modes Silhouette Score:", res$kmodes_score, "\n")
+    cat("PAM Silhouette Score:", res$pam_score)
+  })
+  
+  output$tsnePlot <- renderPlot({
+    res <- analysis()
+    tsne_obj <- Rtsne(res$gower_dist_kmodes, perplexity = 30)
+    tsne_data <- data.frame(tsne_obj$Y, cluster = as.factor(res$df2_filtred$kmodes_cluster))
+    ggplot(tsne_data, aes(x = X1, y = X2, color = cluster)) +
+      geom_point(size = 2) + theme_minimal() + ggtitle("Clusters Visualization (t-SNE)")
+  })
+  
+  output$clusterSummary <- renderTable({
+    res <- analysis()
+    res$df2_filtred %>%
+      group_by(kmodes_cluster) %>%
+      summarise(across(where(is.factor), ~ names(which.max(table(.x)))))
   })
 }
