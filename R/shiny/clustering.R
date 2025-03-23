@@ -11,12 +11,7 @@ missing_data <- df1 %>%
   arrange(desc(Missing_Percentage))
 
 df2 <- df1 %>% dplyr::select(-c("Vacuna contra COVID19", -"Marca", -"Ocupación", -"Estatus del paciente", -"Diagnóstico probable"))
-mean(is.na(df2))
-
-# Subset
-df3 <- df1 %>% filter(!is.na(`Vacuna contra COVID19`) & `Vacuna contra COVID19` != "SE IGNORA" &
-                      !is.na(`Marca`) & `Marca` != "Se desconoce" &
-                        !is.na(`Ocupación`))
+mean(is.na(df2)) # be sure there is no NA values
 
 # K-MODES CLUSTERING -----------------------------------------------------------
 
@@ -25,8 +20,20 @@ library(klaR)
 library(cluster)
 set.seed(123)
 
+symptom_vars <- c(
+  "Fiebre", "Tos", "Odinofagia", "Disnea", "Irritabilidad",
+   "Diarrea", "Dolor torácico", "Escalofríos", "Cefalea", "Mialgias",
+   "Artralgias", "Ataque al estado general", "Rinorrea", "Polipnea",
+   "Vómito", "Dolor abdminal", "Conjuntivitis", "Cianosis",
+   "Inicio súbito", "Anosmia", "Disgeusia"
+)
+
 modes = 2
-df2_filtred <- as.data.frame(df2[0:1000,6:38])
+
+df2_filtred <- df2 %>%
+  dplyr::select(all_of(symptom_vars)) %>%
+  head(1000) %>%  # Taking a subset for clustering
+  as.data.frame()
 df2_filtred_age <- df2_filtred %>%
   mutate(Edad = df$`Edad`[0:1000])
 

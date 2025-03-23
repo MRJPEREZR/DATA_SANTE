@@ -8,8 +8,24 @@ ui <- fluidPage(
       conditionalPanel(
         condition = "input.tabs == 'Clustering'",
         numericInput("clusters", "Number of Clusters", value = 2, min = 2, max = 10),
+        radioButtons("symptomSelection", "Select Symptoms:",
+                     choices = c("All Symptoms" = "all", "Custom Selection" = "custom"),
+                     selected = "all"),
+        
+        conditionalPanel(
+          condition = "input.symptomSelection == 'custom'",
+          checkboxGroupInput("selectedSymptoms", "Select Symptoms for Clustering:",
+                             choices = c("Fiebre", "Tos", "Odinofagia", "Disnea", "Irritabilidad",
+                                         "Diarrea", "Dolor torácico", "Escalofríos", "Cefalea", "Mialgias",
+                                         "Artralgias", "Ataque al estado general", "Rinorrea", "Polipnea",
+                                         "Vómito", "Dolor abdominal", "Conjuntivitis", "Cianosis",
+                                         "Inicio súbito", "Anosmia", "Disgeusia"),
+                             selected = c("Fiebre", "Tos", "Odinofagia", "Disnea", "Irritabilidad", 
+                                          "Diarrea", "Dolor torácico", "Escalofríos", "Cefalea", "Mialgias"))
+        ),
         actionButton("analyze", "Run Analysis")
       ),
+      
       conditionalPanel(
         condition = "input.tabs == 'Prediction Methods'",
         selectInput("predictionMethod", "Select Prediction Method", 

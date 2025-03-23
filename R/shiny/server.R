@@ -11,10 +11,25 @@ server <- function(input, output) {
   })
   
   analysis <- eventReactive(input$analyze, {
-    df2 <- df1 %>% dplyr::select(-c("Vacuna contra COVID19", -"Marca", -"Ocupación", -"Estatus del paciente", -"Diagnóstico probable"))
-    df2_filtred <- as.data.frame(df2[0:1000,6:38])
-    df2_filtred_age <- df2_filtred %>% mutate(Edad = df$`Edad`[0:1000])
     
+    # Get symptoms based on user selection
+    symptom_vars <- if (input$symptomSelection == "all") {
+      c("Fiebre", "Tos", "Odinofagia", "Disnea", "Irritabilidad",
+        "Diarrea", "Dolor torácico", "Escalofríos", "Cefalea", "Mialgias",
+        "Artralgias", "Ataque al estado general", "Rinorrea", "Polipnea",
+        "Vómito", "Dolor abdminal", "Conjuntivitis", "Cianosis",
+        "Inicio súbito", "Anosmia", "Disgeusia")
+    } else {
+      input$selectedSymptoms  # User-selected symptoms
+    }
+    
+    df2_filtred <- df1 %>%
+      dplyr::select(all_of(symptom_vars)) %>%
+      head(1000) %>%  # Taking a subset for clustering
+      as.data.frame()
+    
+    df2_filtred_age <- df2_filtred %>% mutate(Edad = df$`Edad`[0:1000])
+     
     gower_dist_kmodes <- daisy(df2_filtred, metric = "gower")
     gower_dist_pam <- daisy(df2_filtred_age, metric = "gower")
     
