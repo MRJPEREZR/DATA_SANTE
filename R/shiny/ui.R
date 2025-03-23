@@ -5,12 +5,22 @@ ui <- fluidPage(
   
   sidebarLayout(
     sidebarPanel(
-      numericInput("clusters", "Number of Clusters", value = 2, min = 2, max = 10),
-      actionButton("analyze", "Run Analysis")
+      conditionalPanel(
+        condition = "input.tabs == 'Clustering'",
+        numericInput("clusters", "Number of Clusters", value = 2, min = 2, max = 10),
+        actionButton("analyze", "Run Analysis")
+      ),
+      conditionalPanel(
+        condition = "input.tabs == 'Prediction Methods'",
+        selectInput("predictionMethod", "Select Prediction Method", 
+                    choices = c("Method 1", "Method 2")),
+        actionButton("predict", "Run Prediction")
+      )
     ),
     
     mainPanel(
       tabsetPanel(
+        id = "tabs",  # Add an id to the tabsetPanel
         tabPanel("Clustering",  # Main Page for Clustering
                  tabsetPanel(
                    tabPanel("Cluster Visualization", plotOutput("tsnePlot")),
