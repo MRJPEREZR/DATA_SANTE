@@ -11,7 +11,7 @@ server <- function(input, output) {
   })
   
   analysis <- eventReactive(input$analyze, {
-    df2 <- df1 %>% select(-"Vacuna contra COVID19", -"Marca", -"Ocupación", -"Estatus del paciente", -"Diagnóstico probable")
+    df2 <- df1 %>% dplyr::select(-c("Vacuna contra COVID19", -"Marca", -"Ocupación", -"Estatus del paciente", -"Diagnóstico probable"))
     df2_filtred <- as.data.frame(df2[0:1000,6:38])
     df2_filtred_age <- df2_filtred %>% mutate(Edad = df$`Edad`[0:1000])
     
@@ -51,10 +51,46 @@ server <- function(input, output) {
       geom_point(size = 2) + theme_minimal() + ggtitle("Clusters Visualization (t-SNE)")
   })
   
-  output$clusterSummary <- renderTable({
+  cluster_summary_reactive <- reactive({
     res <- analysis()
     res$df2_filtred %>%
       group_by(kmodes_cluster) %>%
       summarise(across(where(is.factor), ~ names(which.max(table(.x)))))
   })
+  
+  output$clusterSummary <- renderTable({
+    cluster_summary_reactive()  # Use the reactive function
+  })
+  
+  output$matches <- renderTable({
+    res <- analysis()
+    cluster_summary <- cluster_summary_reactive()  # Get stored cluster_summary
+    df2_filtred <- res$df2_filtred
+    
+    # Ensure cluster_summary is not NULL before proceeding
+    if (is.null(cluster_summary) || nrow(cluster_summary) == 0) {
+      return(data.frame(Message = "No cluster summary available"))
+    }
+    
+    df2_filtred_with_modes <- df2_filtred %>%
+      left_join(cluster_summary, by = "kmodes_cluster")
+    
+    matches <- df2_filtred_with_modes %>%
+      rowwise() %>%
+      mutate(Matches_Mode = identical(
+        c_across(-kmodes_cluster),
+        cluster_summary[cluster_summary$kmodes_cluster == kmodes_cluster, -1]
+      )) %>%
+      ungroup() %>%
+      group_by(kmodes_cluster) %>%
+      summarise(
+        Count_Mode_Vector = sum(Matches_Mode, na.rm = TRUE),
+        Total = n(),
+        Percentage = (Count_Mode_Vector / Total) * 100,
+        .groups = "drop"
+      )
+    
+    return(matches)  # Ensure output is returned
+  })
+  
 }

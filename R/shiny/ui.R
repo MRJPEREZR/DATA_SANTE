@@ -10,7 +10,8 @@ ui <- fluidPage(
       tabsetPanel(
         tabPanel("Silhouette Scores", verbatimTextOutput("silScores")),
         tabPanel("Cluster Visualization", plotOutput("tsnePlot")),
-        tabPanel("Cluster Summary", tableOutput("clusterSummary"))
+        tabPanel("Cluster Summary", tableOutput("clusterSummary")),
+        tabPanel("Matches", tableOutput("matches"))
       )
     )
   )
