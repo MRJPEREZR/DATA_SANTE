@@ -108,5 +108,13 @@ avg_metrics_wflow <- metrics_summary %>%
 # View results
 print(avg_metrics_wflow)
 
+# FINAL STEP: EXTRACT THE BEST MODEL -------------------------------------------
+
+# Extract the best model (recipe_rand_forest) based on roc_auc
+best_rf_model <- extract_workflow(wf_set, id = "recipe_rand_forest")
+
+# predictions <- predict(final_rf_model, new_data) # to predict new data
+# predictions_prob <- predict(final_rf_model, new_data, type = "prob") # get the probability
+
 
 
