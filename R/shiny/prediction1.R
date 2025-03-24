@@ -110,5 +110,13 @@ metrics_summary <- collect_metrics(results)
 # Print all available metrics
 print(metrics_summary, n = Inf)
 
+avg_metrics_wflow <- metrics_summary %>%
+  group_by(wflow_id, .metric) %>%  # Group by workflow ID and metric type
+  summarise(avg_value = mean(mean), .groups = "drop") %>%  # Compute the mean of the metric
+  pivot_wider(names_from = .metric, values_from = avg_value)  # Reshape to have metrics as columns
+
+# View results
+print(avg_metrics_wflow)
+
 
 
