@@ -105,3 +105,79 @@
   Normalizar y estandarizar variables (es necesario para ciertos modelos)
   
   
+  ✅ Most Relevant Variables for Respiratory Illness Prediction
+1️⃣ Key Symptoms (Direct Indicators of Respiratory Illness)
+
+    Fiebre (Fever) → Common in infections, including respiratory illnesses.
+
+    Disnea (Shortness of breath) → Strong indicator of respiratory distress.
+
+    Tos (Cough) → Key symptom of most respiratory infections. (Wasn't listed, but highly relevant!)
+
+    Rinorrea (Runny nose) → Suggests upper respiratory tract involvement.
+
+    Polipnea (Rapid breathing) → Indicates severe respiratory involvement.
+
+    Cianosis (Bluish skin due to lack of oxygen) → Severe respiratory failure indicator.
+
+2️⃣ Supporting Symptoms (Possible Indicators)
+
+    Dolor torácico (Chest pain) → May indicate severe respiratory infection.
+
+    Escalofríos (Chills) → Suggests systemic infection.
+
+    Cefalea (Headache) → Sometimes linked to viral respiratory infections.
+
+    Mialgias / Artralgias (Muscle/joint pain) → Common in flu-like illnesses.
+
+    Ataque al estado general (General discomfort) → Non-specific but relevant.
+
+    Inicio súbito (Sudden onset) → Suggests acute infections.
+
+3️⃣ Risk Factors (Increase the likelihood of Severe Disease)
+
+    EPOC (Chronic obstructive pulmonary disease) → High-risk for complications.
+
+    Asma (Asthma) → Increased risk of respiratory complications.
+
+    Inmunosupresión (Immunosuppression) → Higher risk of severe infections.
+
+    Hipertensión (Hypertension) → Associated with worse COVID-19 outcomes.
+
+    Diabetes → Increases susceptibility to infections.
+
+    Enfermedad cardiaca (Heart disease) → Affects oxygenation and respiratory function.
+
+    Obesidad (Obesity) → A known risk factor for respiratory complications.
+
+    Insuficiencia renal crónica (Chronic kidney disease) → Affects immune response.
+
+    Tabaquismo (Smoking) → Strongly linked to lung disease and infections.
+
+❌ Less Relevant Variables
+
+These may not be directly useful for prediction:
+
+    Odinofagia (Sore throat) → More common in non-respiratory infections.
+
+    Irritabilidad (Irritability) → Non-specific.
+
+    Diarrea / Vómito / Dolor abdominal → More associated with gastrointestinal infections.
+
+    Conjuntivitis (Eye inflammation) → Can be viral but not a key predictor.
+
+    Anosmia / Disgeusia (Loss of smell/taste) → COVID-19-specific, but not general.
+
+    VIH/SIDA (HIV/AIDS) → Related to immunosuppression but less direct.
+
+    Otra condición (Other conditions) → Too vague to be predictive.
+
+Why Does SMOTE Apply in Each Fold?
+
+    workflow_map("fit_resamples", resamples = cv_folds, ...) ensures that the recipe (recipe_prep) is applied separately for each fold.
+
+    step_smote(target, over_ratio = 1) is part of the recipe, so SMOTE is re-applied for each fold before training the model.
+
+    This is correct behavior because SMOTE should be applied only on the training data of each fold (not on the whole dataset before splitting).
+  
+  
