@@ -10,7 +10,7 @@ df <- readRDS(file = "./R/shiny/dataframe.rds")
 target <- c("target")
 
 symptoms <- c("Fiebre", "Tos", "Disnea", "Dolor torácico", "Escalofríos", "Cefalea", "Mialgias",
-             "Artralgias", "Ataque al estado general", "Rinorrea", "Polipnea", "Dolor abdminal", 
+             "Artralgias", "Ataque al estado general", "Rinorrea", "Polipnea", 
              "Conjuntivitis", "Cianosis", "Inicio súbito", "Disgeusia")
 
 comorbidities <- c("Asma", "Diabetes", "EPOC", "Hipertensión", "Inmunosupresión", "Obesidad", 
@@ -32,7 +32,7 @@ df <- df %>%
   filter(
     if_all(
       c("Fiebre", "Disnea", "Dolor torácico", "Escalofríos", "Cefalea", "Mialgias",
-        "Artralgias", "Ataque al estado general", "Rinorrea", "Polipnea", "Dolor abdminal", 
+        "Artralgias", "Ataque al estado general", "Rinorrea", "Polipnea", 
         "Conjuntivitis", "Cianosis", "Inicio súbito", "Disgeusia",
         "Asma", "Diabetes", "EPOC", "Hipertensión", "Inmunosupresión", "Obesidad", 
         "Enfermedad cardiaca", "Tabaquismo"),
