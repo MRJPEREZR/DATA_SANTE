@@ -57,16 +57,6 @@ df1 <- df_filtered %>%
   as.data.frame()
 mean(is.na(df1)) # be sure there is no NA values
 
-df2 <- df_filtered %>%
-  dplyr::select(all_of(symptoms_demographics)) %>%
-  as.data.frame()
-mean(is.na(df2)) # be sure there is no NA values
-
-df3 <- df_filtered %>%
-  dplyr::select(all_of(comorbidities_demographics)) %>%
-  as.data.frame()
-mean(is.na(df3)) # be sure there is no NA values
-
 # Recipe
 recipe_prep <- recipe(target ~ ., data=df1) %>%
   step_dummy(all_nominal_predictors(), -target) %>% 
