@@ -9,14 +9,6 @@ library(tidymodels)
 library(shinyWidgets)
 
 # Create constant
-# SYMPTOMS <- c("Fiebre", "Tos", "Disnea", "Dolor torácico", "Escalofríos", "Cefalea", "Mialgias",
-#               "Artralgias", "Ataque al estado general", "Rinorrea", "Polipnea", 
-#               "Cianosis", "Inicio súbito")
-# 
-# COMORBIDITIES <- c("Asma", "Diabetes", "EPOC", "Hipertensión", "Inmunosupresión", "Insuficiencia renal crónica", "Obesidad", 
-#                    "Enfermedad cardiaca", "Tabaquismo", "Resultado de laboratorio")
-# 
-# OTHERS <- c("Sexo", "Tipo de manejo", "Pacientes que requirieron intubación", "Pacientes que ingresaron a UCI")
 
 SYMPTOMS <- c("Fever" = "Fiebre",
               "Cough" = "Tos",
@@ -42,6 +34,16 @@ COMORBIDITIES <- c("Asthma" = "Asma",
                    "Heart disease" = "Enfermedad cardiaca",
                    "Smoking" = "Tabaquismo",
                    "Laboratory result" = "Resultado de laboratorio")
+
+COMORBIDITIES1 <- c("Asthma" = "Asma",
+                   "Diabetes" = "Diabetes",
+                   "COPD" = "EPOC",
+                   "Hypertension" = "Hipertensión",
+                   "Immunosuppression" = "Inmunosupresión",
+                   "Chronic kidney disease" = "Insuficiencia renal crónica",
+                   "Obesity" = "Obesidad",
+                   "Heart disease" = "Enfermedad cardiaca",
+                   "Smoking" = "Tabaquismo")
 
 OTHERS <- c("Sex" = "Sexo",
             "Management type" = "Tipo de manejo",

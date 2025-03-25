@@ -2,6 +2,7 @@ library(shiny)
 
 symptoms <- SYMPTOMS
 comorbidities <- COMORBIDITIES
+comorbidities1 <- COMORBIDITIES1
 others <- OTHERS
 
 ui <- fluidPage(
@@ -57,7 +58,7 @@ ui <- fluidPage(
         
         h4("Comorbidities"),
         awesomeCheckboxGroup("comorbidities", "Select Comorbidities:",
-                             choices = comorbidities,
+                             choices = comorbidities1,
                              selected = c("Asma", "Tabaquismo")),
         
         radioButtons("lab_result", "Laboratory Result:",
