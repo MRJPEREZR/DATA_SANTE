@@ -1,6 +1,8 @@
 # DATA SANTE FINAL PROJECT
 Final Project "Data Santé" Course.
 
+![Shiny App](Docs/shinyApp.gif)
+
 # Table of contents
 - [Introduction](#introduction)
 - [Business undestanding](#business-undestanding)
