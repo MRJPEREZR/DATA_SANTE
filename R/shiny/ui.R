@@ -1,5 +1,9 @@
 library(shiny)
 
+symptoms <- SYMPTOMS
+comorbidities <- COMORBIDITIES
+others <- OTHERS
+
 ui <- fluidPage(
   titlePanel("Clustering & Prediction Analysis"),
   
@@ -9,44 +13,65 @@ ui <- fluidPage(
         condition = "input.tabs == 'Clustering'",
         numericInput("clusters", "Number of Clusters", value = 2, min = 2, max = 10),
         radioButtons("symptomSelection", "Select Symptoms:",
-                     choices = c("All Symptoms" = "all", "Custom Selection" = "custom"),
+                     choices = c("All Symptoms" = "all", "Custom Selection" = "custom", "None" = "none"),
                      selected = "all"),
         radioButtons("attributeSelection", "Select other attributes:",
                      choices = c("All Attributes" = "all", "Custom Selection" = "custom", "None" = "none"),
+                     selected = "none"),
+        radioButtons("comorbiditySelection", "Select other attributes:",
+                     choices = c("All Comorbidities" = "all", "Custom Selection" = "custom", "None" = "none"),
                      selected = "none"),
         
         conditionalPanel(
           condition = "input.symptomSelection == 'custom'",
           checkboxGroupInput("selectedSymptoms", "Select Symptoms for Clustering:",
-                             choices = c("Fiebre", "Tos", "Odinofagia", "Disnea", "Irritabilidad",
-                                         "Diarrea", "Dolor torácico", "Escalofríos", "Cefalea", "Mialgias",
-                                         "Artralgias", "Ataque al estado general", "Rinorrea", "Polipnea",
-                                         "Vómito", "Dolor abdominal", "Conjuntivitis", "Cianosis",
-                                         "Inicio súbito", "Anosmia", "Disgeusia"),
-                             selected = c("Fiebre", "Tos", "Odinofagia", "Disnea", "Irritabilidad", 
-                                          "Diarrea", "Dolor torácico", "Escalofríos", "Cefalea", "Mialgias"))
+                             choices = symptoms,
+                             selected = c("Fiebre", "Tos", "Disnea", "Rinorrea", "Polipnea", "Cianosis"))
+        ),
+        conditionalPanel(
+          condition = "input.comorbiditySelection == 'custom'",
+          checkboxGroupInput("selectedComorbidities", "Select comorbidities for Clustering:",
+                             choices = comorbidities,
+                             selected = c("Asma", "Tabaquismo"))
         ),
         conditionalPanel(
           condition = "input.attributeSelection == 'custom'",
           checkboxGroupInput("selectedAttributes", "Select attributes for Clustering:",
-                             choices = c("Sexo", "Tipo de manejo", "Pacientes que requirieron intubación", "Pacientes que ingresaron a UCI"),
+                             choices = others,
                              selected = c("Sexo"))
         ),
         actionButton("analyze", "Run Analysis")
       ),
       
       conditionalPanel(
-        condition = "input.tabs == 'Prediction Methods'",
-        selectInput("predictionMethod", "Select Prediction Method", 
-                    choices = c("Method 1", "Method 2")),
-        actionButton("predict", "Run Prediction")
+        condition = "input.tabs == 'Respiratory Disease Prediction'",
+        h4("Patient Information"),
+        numericInput("Edad", "Age (Years)", value = 30, min = 0, max = 100),
+        radioButtons("Sexo", "Sex", 
+                     choices = c("Male" = "M", "Female" = "F")),
+        
+        h4("Symptoms"),
+        awesomeCheckboxGroup("symptoms", "Select Symptoms:",
+                             choices = symptoms,
+                             selected = c("Fiebre", "Tos", "Disnea")),
+        
+        h4("Comorbidities"),
+        awesomeCheckboxGroup("comorbidities", "Select Comorbidities:",
+                             choices = comorbidities,
+                             selected = c("Asma", "Tabaquismo")),
+        
+        radioButtons("lab_result", "Laboratory Result:",
+                     choices = c("Positive" = "SARS-COV-2",
+                                 "Negative" = "Negativo")),
+        
+        actionButton("predict", "Predict Diagnosis", class = "btn-primary")
       )
     ),
     
     mainPanel(
       tabsetPanel(
-        id = "tabs",  # Add an id to the tabsetPanel
-        tabPanel("Clustering",  # Main Page for Clustering
+        id = "tabs",
+        tabPanel("Clustering",
                  tabsetPanel(
                    tabPanel("Cluster Visualization", plotOutput("tsnePlot")),
                    tabPanel("Silhouette Scores", verbatimTextOutput("silScores")),
@@ -55,11 +80,23 @@ ui <- fluidPage(
                  )
         ),
         
-        tabPanel("Prediction Methods",  # New Main Page for Predictions
+        tabPanel("Respiratory Disease Prediction",
                  tabsetPanel(
-                   tabPanel("Method 1", verbatimTextOutput("predictionMethod1")),
-                   tabPanel("Method 2", verbatimTextOutput("predictionMethod2")),
-                   tabPanel("Comparison", tableOutput("predictionComparison"))
+                   tabPanel("Diagnosis Prediction",
+                            h3("Prediction Results"),
+                            wellPanel(
+                              h4("Diagnosis Probability:"),
+                              verbatimTextOutput("prediction"),
+                              plotOutput("prob_plot")
+                            ),
+                            br(),
+                            h4("Interpretation:"),
+                            p("This tool predicts the probability of two respiratory conditions:"),
+                            tags$ul(
+                              tags$li(tags$strong("ETI (Influenza-like Illness)")),
+                              tags$li(tags$strong("IRAG (Severe Acute Respiratory Infection)"))
+                            )
+                   )
                  )
         )
       )
