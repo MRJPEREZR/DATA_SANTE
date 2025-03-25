@@ -9,14 +9,44 @@ library(tidymodels)
 library(shinyWidgets)
 
 # Create constant
-SYMPTOMS <- c("Fiebre", "Tos", "Disnea", "Dolor torácico", "Escalofríos", "Cefalea", "Mialgias",
-              "Artralgias", "Ataque al estado general", "Rinorrea", "Polipnea", 
-              "Cianosis", "Inicio súbito")
+# SYMPTOMS <- c("Fiebre", "Tos", "Disnea", "Dolor torácico", "Escalofríos", "Cefalea", "Mialgias",
+#               "Artralgias", "Ataque al estado general", "Rinorrea", "Polipnea", 
+#               "Cianosis", "Inicio súbito")
+# 
+# COMORBIDITIES <- c("Asma", "Diabetes", "EPOC", "Hipertensión", "Inmunosupresión", "Insuficiencia renal crónica", "Obesidad", 
+#                    "Enfermedad cardiaca", "Tabaquismo", "Resultado de laboratorio")
+# 
+# OTHERS <- c("Sexo", "Tipo de manejo", "Pacientes que requirieron intubación", "Pacientes que ingresaron a UCI")
 
-COMORBIDITIES <- c("Asma", "Diabetes", "EPOC", "Hipertensión", "Inmunosupresión", "Insuficiencia renal crónica", "Obesidad", 
-                   "Enfermedad cardiaca", "Tabaquismo", "Resultado de laboratorio")
+SYMPTOMS <- c("Fever" = "Fiebre",
+              "Cough" = "Tos",
+              "Shortness of breath" = "Disnea",
+              "Chest pain" = "Dolor torácico",
+              "Chills" = "Escalofríos",
+              "Headache" = "Cefalea",
+              "Muscle pain" = "Mialgias",
+              "Joint pain" = "Artralgias",
+              "General malaise" = "Ataque al estado general",
+              "Runny nose" = "Rinorrea",
+              "Rapid breathing" = "Polipnea",
+              "Cyanosis" = "Cianosis",
+              "Sudden onset" = "Inicio súbito")
 
-OTHERS <- c("Sexo", "Tipo de manejo", "Pacientes que requirieron intubación", "Pacientes que ingresaron a UCI")
+COMORBIDITIES <- c("Asthma" = "Asma",
+                   "Diabetes" = "Diabetes",
+                   "COPD" = "EPOC",
+                   "Hypertension" = "Hipertensión",
+                   "Immunosuppression" = "Inmunosupresión",
+                   "Chronic kidney disease" = "Insuficiencia renal crónica",
+                   "Obesity" = "Obesidad",
+                   "Heart disease" = "Enfermedad cardiaca",
+                   "Smoking" = "Tabaquismo",
+                   "Laboratory result" = "Resultado de laboratorio")
+
+OTHERS <- c("Sex" = "Sexo",
+            "Management type" = "Tipo de manejo",
+            "Patients requiring intubation" = "Pacientes que requirieron intubación",
+            "Patients admitted to ICU" = "Pacientes que ingresaron a UCI")
 
 # Load Data for clustering
 df <- readRDS("dataframe.rds")
