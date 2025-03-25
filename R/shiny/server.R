@@ -1,5 +1,11 @@
 library(shiny)
 server <- function(input, output) {
+  
+  symptoms <- SYMPTOMS
+  comorbidities <- COMORBIDITIES
+  others <- OTHERS
+  
+  # CLUSTERING -----------------------------------------------------------------
   filtered_data <- reactive({
     df1
   })
@@ -11,21 +17,27 @@ server <- function(input, output) {
   })
   
   analysis <- eventReactive(input$analyze, {
-    
     # Get symptoms based on user selection
     symptom_vars <- if (input$symptomSelection == "all") {
-      c("Fiebre", "Tos", "Odinofagia", "Disnea", "Irritabilidad",
-        "Diarrea", "Dolor torácico", "Escalofríos", "Cefalea", "Mialgias",
-        "Artralgias", "Ataque al estado general", "Rinorrea", "Polipnea",
-        "Vómito", "Dolor abdminal", "Conjuntivitis", "Cianosis",
-        "Inicio súbito", "Anosmia", "Disgeusia")
-    } else {
+      symptoms
+    } else if (input$symptomSelection == "custom") {
       input$selectedSymptoms  # User-selected symptoms
+    } else if (input$symptomSelection == "none") {
+      NULL # No symptoms
+    }
+    
+    # Get comorbidities based on user selection
+    comorbidity_vars <- if (input$comorbiditySelection == "all") {
+      comorbidities
+    } else if (input$comorbiditySelection == "custom") {
+      input$selectedComorbidities  # User-selected comorbidities
+    }else if (input$comorbiditySelection == "none") {
+      NULL
     }
     
     # Get other attributes based on user selection
     attribute_vars <- if (input$attributeSelection == "all") {
-      c("Sexo", "Tipo de manejo", "Pacientes que requirieron intubación", "Pacientes que ingresaron a UCI")
+      others
     } else if (input$attributeSelection == "custom") {
       input$selectedAttributes  # User-selected attributes
     } else if (input$attributeSelection == "none") {
@@ -33,7 +45,7 @@ server <- function(input, output) {
     }
     
     # Combine symptom and attribute selections
-    selected_vars <- c(symptom_vars, attribute_vars)
+    selected_vars <- c(symptom_vars, comorbidity_vars, attribute_vars)
     
     df2_filtred <- df1 %>%
       dplyr::select(all_of(selected_vars)) %>%
@@ -139,4 +151,80 @@ server <- function(input, output) {
     return(matches)  # Ensure output is returned
   })
   
+  # PREDICTION -----------------------------------------------------------------
+  user_data <- reactive({
+    req(input$symptoms, input$comorbidities)
+    
+    symptom_cols <- setNames(rep("NO", length(symptoms)), symptoms)
+    symptom_cols[input$symptoms] <- "SI"
+    
+    comorbidity_cols <- setNames(rep("NO", length(comorbidities)), comorbidities)
+    comorbidity_cols[input$comorbidities] <- "SI"
+    
+    # Create the data frame
+    data.frame(
+      Edad = input$Edad,
+      Sexo = input$Sexo,
+      Fiebre = symptom_cols["Fiebre"],
+      Tos = symptom_cols["Tos"],
+      Disnea = symptom_cols["Disnea"],
+      Rinorrea = symptom_cols["Rinorrea"],
+      Polipnea = symptom_cols["Polipnea"],
+      Cianosis = symptom_cols["Cianosis"],
+      `Dolor torácico` = symptom_cols["Dolor torácico"],
+      Escalofríos = symptom_cols["Escalofríos"],
+      Cefalea = symptom_cols["Cefalea"],
+      Mialgias = symptom_cols["Mialgias"],
+      Artralgias = symptom_cols["Artralgias"],
+      `Ataque al estado general` = symptom_cols["Ataque al estado general"],
+      `Inicio súbito` = symptom_cols["Inicio súbito"],
+      EPOC = comorbidity_cols["EPOC"],
+      Asma = comorbidity_cols["Asma"],
+      Inmunosupresión = comorbidity_cols["Inmunosupresión"],
+      Hipertensión = comorbidity_cols["Hipertensión"],
+      Diabetes = comorbidity_cols["Diabetes"],
+      `Enfermedad cardiaca` = comorbidity_cols["Enfermedad cardiaca"],
+      Obesidad = comorbidity_cols["Obesidad"],
+      Tabaquismo = comorbidity_cols["Tabaquismo"],
+      `Insuficiencia renal crónica` = comorbidity_cols["Insuficiencia renal crónica"],
+      `Resultado de laboratorio` = input$lab_result,
+      check.names = FALSE
+    )
+  })
+  
+  # Make predictions when the predict button is clicked
+  prediction <- eventReactive(input$predict, {
+    req(best_rf_model)
+    new_data <- user_data()
+    
+    # Get both class probabilities and predicted class
+    prob_pred <- predict(best_rf_model, new_data, type = "prob")
+    class_pred <- predict(best_rf_model, new_data, type = "class")
+    
+    list(probabilities = prob_pred, class = class_pred)
+  })
+  
+  # Display prediction results
+  output$prediction <- renderPrint({
+    pred <- prediction()
+    cat("Predicted Diagnosis:", as.character(pred$class$.pred_class), "\n\n")
+    cat("Probabilities:\n")
+    print(pred$probabilities)
+  })
+  
+  # Plot probabilities
+  output$prob_plot <- renderPlot({
+    pred <- prediction()
+    probs <- pred$probabilities %>%
+      pivot_longer(cols = everything(), names_to = "Diagnosis", values_to = "Probability")
+    
+    ggplot(probs, aes(x = Diagnosis, y = Probability, fill = Diagnosis)) +
+      geom_bar(stat = "identity") +
+      scale_fill_manual(values = c("#E69F00", "#56B4E9")) +
+      labs(title = "Diagnosis Probability Distribution",
+           y = "Probability") +
+      theme_minimal() +
+      theme(legend.position = "none") +
+      scale_y_continuous(limits = c(0, 1))
+  })
 }

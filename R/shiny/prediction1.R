@@ -10,10 +10,10 @@ df <- readRDS(file = "./R/shiny/dataframe.rds")
 target <- c("target")
 
 symptoms <- c("Fiebre", "Tos", "Disnea", "Dolor torácico", "Escalofríos", "Cefalea", "Mialgias",
-             "Artralgias", "Ataque al estado general", "Rinorrea", "Polipnea", 
-             "Conjuntivitis", "Cianosis", "Inicio súbito", "Disgeusia")
+              "Artralgias", "Ataque al estado general", "Rinorrea", "Polipnea", 
+              "Cianosis", "Inicio súbito")
 
-comorbidities <- c("Asma", "Diabetes", "EPOC", "Hipertensión", "Inmunosupresión", "Obesidad", 
+comorbidities <- c("Asma", "Diabetes", "EPOC", "Hipertensión", "Inmunosupresión", "Insuficiencia renal crónica", "Obesidad", 
                    "Enfermedad cardiaca", "Tabaquismo", "Resultado de laboratorio")
 
 demographics <- c("Edad", "Sexo")
@@ -33,8 +33,8 @@ df <- df %>%
     if_all(
       c("Fiebre", "Disnea", "Dolor torácico", "Escalofríos", "Cefalea", "Mialgias",
         "Artralgias", "Ataque al estado general", "Rinorrea", "Polipnea", 
-        "Conjuntivitis", "Cianosis", "Inicio súbito", "Disgeusia",
-        "Asma", "Diabetes", "EPOC", "Hipertensión", "Inmunosupresión", "Obesidad", 
+        "Cianosis", "Inicio súbito",
+        "Asma", "Diabetes", "EPOC", "Hipertensión", "Inmunosupresión", "Insuficiencia renal crónica", "Obesidad", 
         "Enfermedad cardiaca", "Tabaquismo"),
       ~ . != "SE IGNORA"
     )  # Remove rows where ANY of these columns are "SE IGNORA"
@@ -110,9 +110,13 @@ print(avg_metrics_wflow)
 
 # FINAL STEP: EXTRACT THE BEST MODEL -------------------------------------------
 
-# Extract the best model (recipe_rand_forest) based on roc_auc
+# Extract the best model (recipe_rand_forest) based on metrics
 best_rf_model <- extract_workflow(wf_set, id = "recipe_rand_forest")
-saveRDS(best_rf_model, "./R/shiny/best_rf_model.rds")
+final_rf_model <- best_rf_model %>% fit(df1)
+
+print(final_rf_model$trained)
+saveRDS(final_rf_model, "./R/shiny/best_rf_model.rds")
+
 # predictions <- predict(final_rf_model, new_data) # to predict new data
 # predictions_prob <- predict(final_rf_model, new_data, type = "prob") # get the probability
 
