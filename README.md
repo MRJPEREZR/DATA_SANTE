@@ -246,7 +246,7 @@ After, understanding the meaning of each column, it is time to prepare it accord
 
 - Stores cluster assignments in new column kmodes_cluster.
 
-### PAM Clustering
+### PAM (Partition Around Medoids) Clustering 
 
 - Uses pam() function from cluster package.
 
