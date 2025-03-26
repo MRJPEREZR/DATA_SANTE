@@ -35,7 +35,7 @@ This is a project that follows the CRISP-DM (Cross-industry standard process for
 In a nutshell, we clean and filter the data to get a proper data frame without missing values to be able to fit supervised and unsupervised learning algorithms.
 To explain with more details, next section illustrates each CRIPS-DM steps:
 
-# Business undestanding
+# Business understanding
 
 The dataset provides valuable insights into the incidence of acute respiratory diseases, such as Influenza-Like Illness (ILI) and Severe Acute Respiratory Infection (SARI), within the state of Colima, Mexico, during the year 2020. This is a critical public health concern, as respiratory infections have been one of the leading causes of illness in the region. By analyzing this data, we aim to help healthcare professionals and local authorities better understand patterns and trends in these diseases.
 
