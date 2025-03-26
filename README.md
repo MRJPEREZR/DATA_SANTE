@@ -17,6 +17,7 @@ The final result is an app available to visit here: [https://jperezr.shinyapps.i
 - [Modeling](#modeling)
 - [Evaluation](#evaluation)
 - [Deployment](#deployment)
+- [Summary](#summary)
 
 # How to run it ?
 
@@ -348,5 +349,39 @@ Mode Matching Analysis:
 - It was saved the trained model for future predictions [best_rf_model](R/shiny/best_rf_model.rds) .  
 
 - Shiny application ready for deployment [shiny](R/shiny).
+
+# Summary
+
+# Parallel Comparison: Clustering vs. Prediction
+
+## Modeling
+
+| Aspect              | Clustering Approach                          | Prediction Approach                          |
+|---------------------|---------------------------------------------|---------------------------------------------|
+| **Purpose**         | Identify patient subgroups                  | Classify respiratory diseases               |
+| **Methods**         | • k-modes (categorical)<br>• PAM (mixed)    | • Random Forest<br>• XGBoost<br>• SVM<br>• KNN<br>• MLP |
+| **Data Prep**       | • Filter "SE IGNORA"<br>• Select symptoms   | • SMOTE oversampling<br>• Dummy encoding<br>• Remove zero-variance |
+| **Key Features**    | Symptom patterns + Age (PAM)                | Symptoms + Comorbidities + Demographics     |
+| **Output**          | Cluster assignments                         | Classification probabilities                |
+
+## Evaluation
+
+| Aspect              | Clustering Approach                          | Prediction Approach                          |
+|---------------------|---------------------------------------------|---------------------------------------------|
+| **Metrics**         | • Silhouette score<br>• Cluster purity      | • ROC AUC<br>• Accuracy/Precision/Recall/F1 |
+| **Visualization**   | t-SNE plots colored by cluster              | Metrics comparison plots                    |
+| **Analysis Focus**  | Separation quality and clinical patterns    | Model performance and feature importance    |
+| **Final Output**    | Patient subgroups with characteristic patterns | Trained classifier for new predictions     |
+
+## Key Differences
+
+| Characteristic      | Clustering                     | Prediction                     |
+|---------------------|-------------------------------|-------------------------------|
+| **Primary Goal**    | Discover patterns             | Assign classes                |
+| **Data Needs**      | Unlabeled data                | Labeled training data         |
+| **Validation**      | Internal metrics (silhouette) | Holdout testing               |
+| **Output Type**     | Groups/labels                 | Probabilities                 |
+| **Best Use Case**   | Exploratory analysis          | Diagnostic support            |
+
 
 
