@@ -20,13 +20,19 @@ library(klaR)
 library(cluster)
 set.seed(123)
 
-symptom_vars <- c(
-  "Fiebre", "Tos", "Odinofagia", "Disnea", "Irritabilidad",
-   "Diarrea", "Dolor torácico", "Escalofríos", "Cefalea", "Mialgias",
-   "Artralgias", "Ataque al estado general", "Rinorrea", "Polipnea",
-   "Vómito", "Dolor abdminal", "Conjuntivitis", "Cianosis",
-   "Inicio súbito", "Anosmia", "Disgeusia"
-)
+symptom_vars <-  c("Fever" = "Fiebre",
+                   "Cough" = "Tos",
+                   "Shortness of breath" = "Disnea",
+                   "Chest pain" = "Dolor torácico",
+                   "Chills" = "Escalofríos",
+                   "Headache" = "Cefalea",
+                   "Muscle pain" = "Mialgias",
+                   "Joint pain" = "Artralgias",
+                   "General malaise" = "Ataque al estado general",
+                   "Runny nose" = "Rinorrea",
+                   "Rapid breathing" = "Polipnea",
+                   "Cyanosis" = "Cianosis",
+                   "Sudden onset" = "Inicio súbito")
 
 modes = 2
 
@@ -115,3 +121,31 @@ matches <- df2_filtred_with_modes %>%
   group_by(kmodes_cluster) %>%
   summarise(Count_Mode_Vector = sum(Matches_Mode), Total = n(), .groups = "drop") %>%
   mutate(Percentage = (Count_Mode_Vector / Total) * 100)
+
+## FURTHER ANALISYS ------------------------------------------------------------
+feature_importance <- df2_filtred %>%
+  pivot_longer(-kmodes_cluster, names_to = "feature") %>%
+  count(kmodes_cluster, feature, value) %>%
+  group_by(kmodes_cluster, feature) %>%
+  mutate(prop = n / sum(n)) %>%
+  group_by(feature) %>%
+  summarise(
+    importance = sd(prop),  # Measures how differently features behave across clusters
+    .groups = "drop"
+  ) %>%
+  arrange(desc(importance))
+feature_importance # Higher importance values indicate features that vary most between clusters (key discriminators).
+
+ggplot(feature_importance, aes(x = reorder(feature, importance), y = importance)) +
+  geom_col() +
+  coord_flip() +
+  labs(title = "Cluster-Discriminating Features", x = "Feature", y = "Importance (SD of Proportions)")
+
+library(broom)
+chi_squared_results <- df2_filtred %>%
+  dplyr::select(-kmodes_cluster) %>%
+  map(~ tidy(chisq.test(.x, df2_filtred$kmodes_cluster))) %>%
+  bind_rows(.id = "feature") %>%
+  arrange(p.value)
+
+chi_squared_results # Low p-values (<0.05) indicate features significantly associated with cluster assignment.

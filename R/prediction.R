@@ -9,20 +9,34 @@ df <- readRDS(file = "./R/shiny/dataframe.rds")
 
 target <- c("target")
 
-symptoms <- c("Fiebre", "Tos", "Disnea", "Dolor torácico", "Escalofríos", "Cefalea", "Mialgias",
-              "Artralgias", "Ataque al estado general", "Rinorrea", "Polipnea", 
-              "Cianosis", "Inicio súbito")
+symptoms <- c("Fever" = "Fiebre",
+              "Cough" = "Tos",
+              "Shortness of breath" = "Disnea",
+              "Chest pain" = "Dolor torácico",
+              "Chills" = "Escalofríos",
+              "Headache" = "Cefalea",
+              "Muscle pain" = "Mialgias",
+              "Joint pain" = "Artralgias",
+              "General malaise" = "Ataque al estado general",
+              "Runny nose" = "Rinorrea",
+              "Rapid breathing" = "Polipnea",
+              "Cyanosis" = "Cianosis",
+              "Sudden onset" = "Inicio súbito")
 
-comorbidities <- c("Asma", "Diabetes", "EPOC", "Hipertensión", "Inmunosupresión", "Insuficiencia renal crónica", "Obesidad", 
-                   "Enfermedad cardiaca", "Tabaquismo", "Resultado de laboratorio")
+comorbidities <- c("Asthma" = "Asma",
+                   "Diabetes" = "Diabetes",
+                   "COPD" = "EPOC",
+                   "Hypertension" = "Hipertensión",
+                   "Immunosuppression" = "Inmunosupresión",
+                   "Chronic kidney disease" = "Insuficiencia renal crónica",
+                   "Obesity" = "Obesidad",
+                   "Heart disease" = "Enfermedad cardiaca",
+                   "Smoking" = "Tabaquismo",
+                   "Laboratory result" = "Resultado de laboratorio")
 
-demographics <- c("Edad", "Sexo")
+demographics <- c("Age" = "Edad", "Sex" = "Sexo")
 
 all_attr <- c(symptoms, comorbidities, demographics, target)
-
-symptoms_demographics <- c(symptoms, demographics, target)
-
-comorbidities_demographics <- c(comorbidities, demographics, target)
 
 df <- df %>%
   rename(target = `Diagnóstico probable`) %>%
@@ -68,7 +82,7 @@ library(tidymodels)
 library(kernlab) # SVM support
 library(kknn)    # KNN
 
-rf <- rand_forest() %>% set_engine("ranger") %>% set_mode("classification")
+rf <- rand_forest() %>% set_engine("ranger", importance = "permutation") %>% set_mode("classification")
 xgb <- boost_tree() %>% set_engine("xgboost") %>% set_mode("classification")
 svm <- svm_poly() %>% set_engine("kernlab") %>% set_mode("classification")
 knn <- nearest_neighbor() %>% set_engine("kknn") %>% set_mode("classification")
@@ -120,5 +134,38 @@ saveRDS(final_rf_model, "./R/shiny/best_rf_model.rds")
 # predictions <- predict(final_rf_model, new_data) # to predict new data
 # predictions_prob <- predict(final_rf_model, new_data, type = "prob") # get the probability
 
+# FURTHER ANALYSYS -------------------------------------------------------------
+
+library(stringr)
+
+# Step 1: Clean dummy variable names
+importance_clean <- importance %>%
+  mutate(
+    Parent_Variable = str_replace(Variable, "_SI$|_.*$", ""),  # Remove suffixes
+    Parent_Variable = str_replace(Parent_Variable, "Laboratory result", "Resultado de laboratorio")  # Optional: revert translations
+  )
+
+# Step 2: Sum importance by parent variable
+aggregated_importance <- importance_clean %>%
+  group_by(Parent_Variable) %>%
+  summarise(Total_Importance = sum(Importance), .groups = "drop") %>%
+  arrange(desc(Total_Importance))
+
+# View cleaned results
+print(aggregated_importance, n = Inf)
+
+aggregated_importance %>%
+  slice_max(Total_Importance, n = 15) %>%
+  mutate(Parent_Variable = fct_reorder(Parent_Variable, Total_Importance)) %>%
+  ggplot(aes(x = Total_Importance, y = Parent_Variable, fill = Total_Importance)) +
+  geom_col() +
+  scale_fill_viridis_c() +
+  labs(
+    title = "Random Forest Feature Importance (Aggregated)",
+    subtitle = "Top predictors for COVID/Influenza classification",
+    x = "Importance Score",
+    y = ""
+  ) +
+  theme_minimal()
 
 
