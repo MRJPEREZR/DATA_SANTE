@@ -1,7 +1,6 @@
 # DATA SANTE FINAL PROJECT
-Final Project "Data Santé" Course.
 
-We collected the data from an official source provided by the Mexican government "Censo General de Casos de Enfermedad Respiratoria Viral en Colima".
+We collected the data from an official source provided by the Mexican government [Censo General de Casos de Enfermedad Respiratoria Viral en Colima](https://datos.gob.mx/busca/dataset/censo-general-de-casos-de-enfermedad-respiratoria-viral-estudiados-en-la-entidad-de-colima).
 Our goal is to analyze this dataset by applying clustering and machine learning algorithms. 
 Specifically, we aim to develop a predictive model for clinical diagnosis (Influenza-Like Illness or Severe Acute Respiratory Infection).
 
@@ -10,6 +9,7 @@ The final result is an app available to visit here: [https://jperezr.shinyapps.i
 ![Shiny App](Docs/shinyApp.gif)
 
 # Table of contents
+- [How to run it ?](#how-to-running-it-?)
 - [Introduction](#introduction)
 - [Business undestanding](#business-undestanding)
 - [Data understanding](#data-understanding)
@@ -17,6 +17,16 @@ The final result is an app available to visit here: [https://jperezr.shinyapps.i
 - [Modeling](#modeling)
 - [Evaluation](#evaluation)
 - [Deployment](#deployment)
+
+# How to run it ?
+
+It's simple!, first install R, shiny (see more [here])(https://shiny.posit.co/)), and execute the following commands:
+```
+git clone https://github.com/MRJPEREZR/DATA_SANTE.git
+cd DATA_SANTE/R/shiny
+R
+shiny::RunApp()
+```
 
 # Introduction
 
@@ -157,23 +167,63 @@ In this context, applying clustering and machine learning techniques will not on
 
 # Data Preparation
 
-After, understanding the meaning of each column, it is time to filter it according to our interest.
+After, understanding the meaning of each column, it is time to prepare it according to our interest.
 
+## Handling Missing Values
 
-## Transforming NA char values to real NA missing values
+- Converts all text "NA" values to proper R missing values (NA).
 
-## Fixing date values to variables of interesting.
+- Applies this transformation to all character columns.
 
-## Creating new varibles of interesting
+## Numeric Conversion
 
-| Column                                          | Data type original -> transformed   |
-|-------------------------------------------------|-------------------------------------|
-| Días entre inicio de síntomas y toma de muestra | num                                 |
-| Días entre inicio de síntomas y defunción       | num                                 |
+- Specifically converts case numbers from character to numeric.
 
-## Categorical values mapping
+- Uses regex to verify valid numbers before conversion.
 
-Each column was transformed as factor. So, [here](Docs/LabelsForCategoricalVariables.md), you can see the mapping between each label factor and its respective number id.
+- Sets invalid entries to NA.
+
+## Date Handling
+
+- Handles Excel numeric date format (days since 1899-12-30).
+
+- Converts numeric dates to proper Date format.
+
+- Preserves existing properly formatted dates.
+
+- Processes other date columns from mm/dd/yyyy format.
+
+- Uses lubridate for consistent date handling.
+
+## Categorical encoding
+
+- Converts all character columns to factors.
+
+- Creates a mapping table showing how factor levels were converted to numeric values **[here](Docs/LabelsForCategoricalVariables.md)**.
+
+- Useful for understanding the encoding scheme later.
+
+## Feature Groups
+
+- Symptoms: 13 clinical symptoms like fever, cough, dyspnea.
+
+- Comorbidities: 10 pre-existing conditions like diabetes, hypertension.
+
+- Demographics: Age and sex.
+
+## Data Filtering
+
+- Removes records with pending lab results.
+
+- Excludes rows where any symptom/comorbidity is marked "SE IGNORA" (unknown).
+
+## Data Export
+
+- Saves cleaned data in two formats:
+
+- CSV for general use
+
+- RDS (R's native format) preserving factor levels and data types
 
 # Modeling
 
@@ -198,6 +248,46 @@ Each column was transformed as factor. So, [here](Docs/LabelsForCategoricalVaria
 - Includes age information in addition to symptoms.
 
 - Stores cluster assignments in pam_cluster.
+
+## Prediction methods
+
+### Class Balancing
+
+- Subsampling 5000 ETI cases (for computational efficiency).
+
+- Keeping all IRAG cases.
+
+- Shuffling the combined dataset.
+
+### Feature Engineering
+
+- Dummy Encoding: Converts categorical predictors to numeric.
+
+- Zero-Variance Removal: Eliminates constant predictors.
+
+- SMOTE: Applies synthetic minority oversampling to balance classes.
+
+### Model Definitions
+
+1. Random Forest (rand_forest()).
+
+2. XGBoost (boost_tree()).
+
+3. SVM with Polynomial Kernel (svm_poly()).
+
+4. k-Nearest Neighbors (nearest_neighbor()).
+
+5. Multilayer Perceptron (mlp())
+
+### Cross-Validation Setup
+
+Creates 5-fold cross-validation splits.
+
+### Workflow Management
+
+- Combines preprocessing recipe with each model
+
+- Enables consistent preprocessing across models
 
 # Evaluation
 
@@ -234,8 +324,29 @@ Mode Matching Analysis:
 
 ## Machine learning
 
+### Performance Metrics
+
+- ROC AUC.
+
+- Accuracy.
+
+- Precision.
+
+- Recall.
+
+- F1-score.
+
+### Model Selection
+
+- Identifies top-performing model (Random Forest in this case).
+
+- Trains final model on full dataset.
 
 
 # Deployment
+
+- It was saved the trained model for future predictions [best_rf_model](./DATA_SANTE/R/shiny/best_rf_model.rds) .  
+
+- Shiny application ready for deployment [DATA_SANTE/R/shiny](./DATA_SANTE/R/shiny).
 
 
