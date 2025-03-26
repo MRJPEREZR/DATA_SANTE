@@ -1,7 +1,7 @@
 # DATA SANTE FINAL PROJECT
 
 We collected the data from an official source provided by the Mexican government [Censo General de Casos de Enfermedad Respiratoria Viral en Colima](https://datos.gob.mx/busca/dataset/censo-general-de-casos-de-enfermedad-respiratoria-viral-estudiados-en-la-entidad-de-colima).
-Our goal is to analyze this dataset by applying clustering and machine learning algorithms. 
+Our goal is to analyze this dataset following the CRISP-DM methodology and applying machine learning algorithms. 
 Specifically, we aim to develop a predictive model for clinical diagnosis (Influenza-Like Illness or Severe Acute Respiratory Infection).
 
 The final result is an app available to visit here: [https://jperezr.shinyapps.io/datasante_imt/](https://jperezr.shinyapps.io/datasante_imt/)
@@ -52,6 +52,11 @@ From a business perspective, this analysis can contribute to:
 In this context, applying clustering and machine learning techniques will not only help in improving disease diagnosis and medical discharge predictions but also in providing actionable insights for better healthcare management and planning.
 
 # Data understanding
+
+## Size of the dataset
+
+31862 lignes
+65 features
 
 ## Profiling report
 [Here](https://mrjperezr.github.io/DATA_SANTE/Docs/profiling_report.html) you can find a profiling report generated with python to take a quick look to the initial dataset state.
