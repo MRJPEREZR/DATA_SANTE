@@ -346,7 +346,7 @@ Mode Matching Analysis:
 
 # Deployment
 
-- It was saved the trained model for future predictions [best_rf_model](R/shiny/best_rf_model.rds) .  
+- The trained model was saved for future predictions [best_rf_model](R/shiny/best_rf_model.rds) .  
 
 - Shiny application ready for deployment [shiny](R/shiny).
 
