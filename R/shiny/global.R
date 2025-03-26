@@ -1,7 +1,7 @@
 # checking if all requirements are satisfied locally
 
 packages <- c("tidyverse", "klaR", "cluster", "Rtsne", "MASS",   
-              "dplyr", "tidymodels", "shinyWidgets")
+              "dplyr", "tidymodels", "shinyWidgets", "ranger")
 
 missing_packages <- packages[!(packages %in% installed.packages()[,"Package"])]
 if(length(missing_packages)) install.packages(missing_packages, dependencies = TRUE)
@@ -17,6 +17,7 @@ library(dplyr)
 
 library(tidymodels)
 library(shinyWidgets)
+library(ranger)
 
 # Create constant
 
@@ -68,4 +69,6 @@ df1 <- df1 %>% dplyr::select(-c("Institución tratante", "Unidad notificante", "
 #Load data for prediction
 best_rf_model <- readRDS("best_rf_model.rds")
 
+# deploy shinyApp: rsconnect::deployApp('path/to/your/app')
+# stop shinyApp: rsconnect::terminateApp("<your app's name>")
 

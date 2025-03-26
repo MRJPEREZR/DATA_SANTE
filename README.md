@@ -1,6 +1,12 @@
 # DATA SANTE FINAL PROJECT
 Final Project "Data Santé" Course.
 
+We collected the data from an official source provided by the Mexican government "Censo General de Casos de Enfermedad Respiratoria Viral en Colima".
+Our goal is to analyze this dataset by applying clustering and machine learning algorithms. 
+Specifically, we aim to develop a predictive model for clinical diagnosis (Influenza-Like Illness or Severe Acute Respiratory Infection).
+
+The final result is an app available to visit here: [https://jperezr.shinyapps.io/datasante_imt/](https://jperezr.shinyapps.io/datasante_imt/)
+
 ![Shiny App](Docs/shinyApp.gif)
 
 # Table of contents
@@ -14,9 +20,25 @@ Final Project "Data Santé" Course.
 
 # Introduction
 
-Data science project following the CRISP methodology.
+This is a project that follows the CRISP-DM (Cross-industry standard process for data mining) methodology. 
+In a nutshell, we clean and filter the data to get a proper data frame without missing values to be able to fit supervised and unsupervised learning algorithms.
+To explain with more details, next section illustrates each CRIPS-DM steps:
 
 # Business undestanding
+
+The dataset provides valuable insights into the incidence of acute respiratory diseases, such as Influenza-Like Illness (ILI) and Severe Acute Respiratory Infection (SARI), within the state of Colima, Mexico, during the year 2020. This is a critical public health concern, as respiratory infections have been one of the leading causes of illness in the region. By analyzing this data, we aim to help healthcare professionals and local authorities better understand patterns and trends in these diseases.
+
+From a business perspective, this analysis can contribute to:
+
+- Improved Resource Allocation: Understanding the severity and distribution of cases can help local health services better allocate resources such as medical personnel, equipment, and medicines.
+
+- Public Health Strategies: Insights derived from predictive models can assist in designing more effective public health interventions, helping prevent the spread of infections.
+
+- Policy Decision Support: The analysis can provide valuable data to inform governmental policies regarding healthcare funding, vaccination campaigns, and other preventive measures.
+
+- Enhancing Healthcare Response: By developing predictive models for clinical diagnosis and discharge times, we can support healthcare providers in managing patient flow more efficiently, improving both the quality of care and patient outcomes.
+
+In this context, applying clustering and machine learning techniques will not only help in improving disease diagnosis and medical discharge predictions but also in providing actionable insights for better healthcare management and planning.
 
 # Data understanding
 
@@ -135,7 +157,8 @@ Data science project following the CRISP methodology.
 
 # Data Preparation
 
-Describe our whole work cleaning and transforming variables to prepare our dataset to train models.
+After, understanding the meaning of each column, it is time to filter it according to our interest.
+
 
 ## Transforming NA char values to real NA missing values
 
@@ -154,6 +177,65 @@ Each column was transformed as factor. So, [here](Docs/LabelsForCategoricalVaria
 
 # Modeling
 
+## Clustering Methods
+
+### k-modes Clustering
+
+- Uses kmodes() function from klaR package.
+
+- Configured for 2 clusters (modes = 2).
+
+- Uses Gower distance metric (daisy() with metric="gower") suitable for mixed data.
+
+- Stores cluster assignments in new column kmodes_cluster.
+
+### PAM Clustering
+
+- Uses pam() function from cluster package.
+
+- Also uses Gower distance.
+
+- Includes age information in addition to symptoms.
+
+- Stores cluster assignments in pam_cluster.
+
 # Evaluation
 
+## Clustering
+
+### Metrics
+
+Silhouette Scores:
+
+- Calculates silhouette scores for both methods.
+
+- k-modes score indicates how well patients fit their assigned symptom clusters.
+
+- PAM score evaluates clustering considering both symptoms and age.
+
+- Higher scores (closer to 1) indicate better cluster separation.
+
+### Visualization
+t-SNE Plots:
+
+- Uses Rtsne for dimensionality reduction.
+
+- Creates 2D visualizations of high-dimensional clustering results.
+
+- Color-codes points by cluster assignment.
+
+- Generates separate plots for k-modes and PAM results.
+
+Mode Matching Analysis:
+
+- Calculates what percentage of patients exactly match their cluster's mode vector.
+
+- Provides measure of how "pure" or well-defined the clusters are.
+
+## Machine learning
+
+
+
 # Deployment
+
+
