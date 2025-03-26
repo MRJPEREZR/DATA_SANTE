@@ -136,7 +136,16 @@ saveRDS(final_rf_model, "./R/shiny/best_rf_model.rds")
 
 # FURTHER ANALYSYS -------------------------------------------------------------
 
+library(vip)
 library(stringr)
+
+# Get variable importance
+importance <- final_rf_model %>% 
+  extract_fit_parsnip() %>% 
+  vip::vi()
+
+# View sorted importance
+importance %>% arrange(desc(Importance))
 
 # Step 1: Clean dummy variable names
 importance_clean <- importance %>%
