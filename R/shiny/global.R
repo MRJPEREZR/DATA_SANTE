@@ -1,3 +1,13 @@
+# checking if all requirements are satisfied locally
+
+packages <- c("tidyverse", "klaR", "cluster", "Rtsne", "MASS",   
+              "dplyr", "tidymodels", "shinyWidgets")
+
+missing_packages <- packages[!(packages %in% installed.packages()[,"Package"])]
+if(length(missing_packages)) install.packages(missing_packages, dependencies = TRUE)
+
+lapply(packages, library, character.only = TRUE)
+
 library(tidyverse)
 library(klaR)
 library(cluster)
