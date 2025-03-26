@@ -55,7 +55,7 @@ In this context, applying clustering and machine learning techniques will not on
 
 ## Size of the dataset
 
-31862 lignes
+31862 rows
 
 65 features
 
