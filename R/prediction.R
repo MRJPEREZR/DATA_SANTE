@@ -151,7 +151,7 @@ importance %>% arrange(desc(Importance))
 importance_clean <- importance %>%
   mutate(
     Parent_Variable = str_replace(Variable, "_SI$|_.*$", ""),  # Remove suffixes
-    Parent_Variable = str_replace(Parent_Variable, "Laboratory result", "Resultado de laboratorio")  # Optional: revert translations
+    Parent_Variable = str_replace(Parent_Variable, "Laboratory result", "Resultado de laboratorio")
   )
 
 # Step 2: Sum importance by parent variable
